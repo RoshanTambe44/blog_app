@@ -31,30 +31,37 @@ export default function YourProfile() {
           contextData.value.setUsername(userDataRes.data.tokenUserData.username)
           contextData.value.setUserId(userDataRes.data.tokenUserData._id)
           contextData.value.setUserEmail(userDataRes.data.tokenUserData.email)
+          getMyPosts(userDataRes.data.tokenUserData._id)
+          getMyLikes(userDataRes.data.tokenUserData._id)
   
           
       })()
   },[])    
 
-useEffect(()=>{
-  ;(async()=>{try {
-    const myData = await axios.post("/api/users/post/getmypost", {userId: contextData.value.userId})
+
+
+
+async function getMyPosts(userid) {
+ try {
+    const myData = await axios.post("/api/users/post/getmypost", {userId: userid})
     setmyPosts(myData.data.getMyPosts.reverse())
     
     
   } catch (error) {
     console.log(error)
-  }})();
-}, [])
+  };
+  
+}
 
-useEffect(()=>{
-  (async()=>{
-      try {
-          const res = await axios.post("/api/users/likes/getlikedata",{userId : contextData.value.userId});  setLikedData(res.data.res)
-  } catch (error) {
-      console.log(error)
-  }})()
-},[chargeGetLikeData])
+async function getMyLikes(userid) {
+  try {
+    const res = await axios.post("/api/users/likes/getlikedata",{userId : userid});  setLikedData(res.data.res)
+} catch (error) {
+console.log(error)
+}
+  
+}
+
 
 useEffect(() => {
   (async () => {
@@ -86,11 +93,14 @@ async function likeHandler(id){
      const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.value.userId, postId:id })
       setchargeLikeCount(Math.random());
       setChargeGetLikeData(Math.random())
+      getMyLikes(contextData.value.userId)
   }
   else{
       const likeRes = await axios.post("/api/users/likes", { userId : contextData.value.userId, postId:id  })    
       setchargeLikeCount(Math.random());
       setChargeGetLikeData(Math.random())
+      getMyLikes(contextData.value.userId)
+
   }
 }
 

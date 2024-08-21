@@ -37,7 +37,7 @@ useEffect(()=>{
         contextData.value.setUsername(userDataRes.data.tokenUserData.username)
         contextData.value.setUserId(userDataRes.data.tokenUserData._id)
         contextData.value.setUserEmail(userDataRes.data.tokenUserData.email)
-        
+        getAllLIkes(userDataRes.data.tokenUserData._id)
     })()
 },[])
 
@@ -56,18 +56,7 @@ useEffect(()=>{
     })();
 },[])    
 
-useEffect(()=>{
-    
-    if (contextData.value.userId) { 
-    (async()=>{
-        try {
-            
-            const res = await axios.post("/api/users/likes/getlikedata",{userId : contextData.value.userId});  setLikedData(res.data.res)
-            console.log(res.data.res)
-    } catch (error) {
-        console.log(error)
-    }})()}
-},[chargeGetLikeData])
+
 
 useEffect(() => {
  (async () => {
@@ -94,17 +83,29 @@ useEffect(() => {
      })()
    }, [])
 
+async function getAllLIkes(userid) {
+    try {   
+        const res = await axios.post("/api/users/likes/getlikedata",{userId : userid});  setLikedData(res.data.res)
+        console.log(res.data.res)
+} catch (error) {
+    console.log(error)
+}
+    
+}
 
 async function likeHandler(id){
     if(likedData.some((data)=> data.postId === id )){
        const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.value.userId, postId:id })
         setChargeGetLikeData(Math.random())
         setchargeLikeCount(Math.random());
+        getAllLIkes(contextData.value.userId)
     }
     else{
         const likeRes = await axios.post("/api/users/likes", { userId : contextData.value.userId, postId:id  })    
         setChargeGetLikeData(Math.random())
         setchargeLikeCount(Math.random());
+        getAllLIkes(contextData.value.userId)
+
     }
 }
 
@@ -168,7 +169,7 @@ function shareHandler(id) {
                         <p className="text-gray-700 mt-4">{post.content.message}</p>
                         <div className="w-full mt-8"><span className="flex gap-4">
                         <div className="flex flex-col items-center">
-                        <i onClick={()=>{likeHandler(post._id); }} className={likedData.some((obj) => obj.postId === post._id)? "fa-solid fa-heart": "fa-regular fa-heart" }></i>
+                        <i onClick={()=>{likeHandler(post._id); }} className={likedData.some((obj) => obj.postId === post._id)? "fa-solid fa-heart text-pink-400 ": "fa-regular fa-heart" }></i>
                         <div className="text-xs font-light">{postLikeCounts[post._id] || 0}</div>
                         </div>
 
