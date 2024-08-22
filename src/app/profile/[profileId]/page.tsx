@@ -113,7 +113,17 @@ export default function Profile() {
         }
       }
 
-     function redirectToPost(id){
+     function redirectToPost(id, type){
+      if(type === "title"){
+        if(contextData.value.commentVisibleId ){
+            contextData.value.setCommentVisibleId(false)
+        }
+    }
+    else{
+        if(!contextData.value.commentVisibleId ){
+            contextData.value.setCommentVisibleId(true)
+        }
+    }
         router.push(`${location.origin}/mainDashboard/${id}`)
 
      }
@@ -176,7 +186,7 @@ export default function Profile() {
                 
                <div className="h-[60%] mt-4 flex flex-col gap-4 overflow-y-scroll no-scrollbar rounded-lg"> 
                 {posts.map((post)=> <div  className="border-b border-gray-200 p-4 shadow-lg rounded-lg bg-gray-400">
-                  <h1  className="text-xl cursor-pointer font-semibold text-gray-900 mt-5">{post.content.title}</h1>
+                  <h1 onClick={()=>{redirectToPost(post._id, "title")}}  className="text-xl cursor-pointer font-semibold text-gray-900 mt-5">{post.content.title}</h1>
                   <h1 className="text-gray-700 mt-4">{post.content.message}</h1>
                   <div className="w-full mt-8">
                     <span className="flex gap-4 cursor-pointer">
@@ -186,7 +196,7 @@ export default function Profile() {
                     </div>
                     
                     <div className="flex flex-col items-center">
-                    <i onClick={()=>{redirectToPost(post._id)}} className=" fa-regular fa-comment"></i>
+                    <i onClick={()=>{redirectToPost(post._id, "comment")}} className=" fa-regular fa-comment"></i>
                     <div className="text-xs font-light">{postCommentCounts[post._id] || 0}</div>
                     </div>
 
