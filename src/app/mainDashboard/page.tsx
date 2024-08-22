@@ -110,17 +110,28 @@ async function likeHandler(id){
 }
 
 
-function commentHandler (id) {
+// function commentHandler (id) {
         
-   contextData.value.setCommentVisibleId(true)
+//    contextData.value.setCommentVisibleId(true)
     
 
-}
- function redirectToPost(id ){
+// }
+ function redirectToPost(id, type ){
 
-    
+    if(type === "title"){
+        if(contextData.value.commentVisibleId ){
+            contextData.value.setCommentVisibleId(false)
+        }
+    }
+    else{
+        if(!contextData.value.commentVisibleId ){
+            contextData.value.setCommentVisibleId(true)
+        }
+    }
     router.push(`mainDashboard/${id}`)
  }
+
+
 
  
 function shareHandler(id) {
@@ -130,6 +141,7 @@ function shareHandler(id) {
 
     const userName = contextData?.value?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
+    console.log(postData)
 
   return (
     <div className='h-[100vh] overflow-hidden'><nav className="bg-white shadow-md " >
@@ -164,17 +176,17 @@ function shareHandler(id) {
                 <div className="space-y-4 overflow-y-scroll no-scrollbar h-[90%] rounded-lg">
                     {postData.map((post)=><div key={post._id}  className="border-b cursor-pointer border-gray-200 p-4 shadow-lg rounded-lg bg-gray-400"  >
                     
-                        <div className=""><div className="flex items-center gap-2"><div className="bg-black rounded-full h-5 w-5 text-white flex items-center justify-center ">{post.username.charAt(0).toUpperCase()}</div><h1 className="">{post.username}</h1></div></div>
-                        <h3 className="text-xl font-semibold text-gray-900 mt-5" onClick={()=>{redirectToPost(post._id)}}>{post.content.title}</h3>
+                        <div className=""><div className="flex items-center gap-2"><div className="bg-black rounded-full h-5 w-5 text-white flex items-center justify-center ">{post.username.charAt(0).toUpperCase()}</div><h1 onClick={()=>router.push(`${location.origin}/profile/${post.userId}`)} className="">{post.username}</h1></div></div>
+                        <h3 className="text-xl font-semibold text-gray-900 mt-5" onClick={()=>{redirectToPost(post._id, "title")}}>{post.content.title}</h3>
                         <p className="text-gray-700 mt-4">{post.content.message}</p>
                         <div className="w-full mt-8"><span className="flex gap-4">
                         <div className="flex flex-col items-center">
-                        <i onClick={()=>{likeHandler(post._id); }} className={likedData.some((obj) => obj.postId === post._id)? "fa-solid fa-heart text-pink-400 ": "fa-regular fa-heart" }></i>
+                        <i onClick={()=>{likeHandler(post._id); }} className={likedData.some((obj) => obj.postId === post._id)? "fa-solid fa-heart ": "fa-regular fa-heart" }></i>
                         <div className="text-xs font-light">{postLikeCounts[post._id] || 0}</div>
                         </div>
 
                         <div className="flex flex-col items-center">
-                        <i onClick={()=>{commentHandler(post._id);redirectToPost(post._id)}} className="fa-regular fa-comment"></i><div className="text-xs font-light">{postCommentCounts[post._id] || 0}</div>
+                        <i onClick={()=>{redirectToPost(post._id, "comment")}} className="fa-regular fa-comment"></i><div className="text-xs font-light">{postCommentCounts[post._id] || 0}</div>
                         </div>
                             
 

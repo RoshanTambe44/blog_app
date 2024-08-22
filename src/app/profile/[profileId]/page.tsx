@@ -2,23 +2,30 @@
 import { useStore } from "@/context/store";
 import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 
-export default function YourProfile() {
+export default function Profile() {
   const router = useRouter()
   const contextData = useStore()
-  const [myPosts, setmyPosts] = useState([])
+  const userID =  useParams().profileId
+  const [posts, setposts] = useState([])
+  const [username, setusername] = useState()
   const [likedData, setLikedData] = useState([])
+  const [chargeLikeCount, setchargeLikeCount] = useState()
+  const [chargeGetLikeData, setChargeGetLikeData] = useState()
   const [postLikeCounts, setpostLikeCounts] = useState([])
   const [postCommentCounts, setpostCommentCounts] = useState([])
-  const [chargeGetLikeData, setChargeGetLikeData] = useState()
   const [chargeCommentsCount, setchargeCommentsCount] = useState()
-  const [chargeLikeCount, setchargeLikeCount] = useState()
+
+
+
+
+
 
 
   const userName = contextData?.value?.userName || "";
@@ -31,98 +38,90 @@ export default function YourProfile() {
           contextData.value.setUsername(userDataRes.data.tokenUserData.username)
           contextData.value.setUserId(userDataRes.data.tokenUserData._id)
           contextData.value.setUserEmail(userDataRes.data.tokenUserData.email)
-          getMyPosts(userDataRes.data.tokenUserData._id)
-          getMyLikes(userDataRes.data.tokenUserData._id)
+         
   
           
       })()
-  },[])    
-
-
-
-
-async function getMyPosts(userid) {
- try {
-    const myData = await axios.post("/api/users/post/getmypost", {userId: userid})
-    setmyPosts(myData.data.getMyPosts.reverse())
-    
-    
-  } catch (error) {
-    console.log(error)
-  };
+  },[])   
   
-}
+  useEffect(()=>{
+    (async()=>{
+        const res = await axios.post("/api/users/post/getmypost", {userId: userID})
+        console.log(res.data.getMyPosts)
+        setposts(res.data.getMyPosts)
+    })()
+  },[])
 
-async function getMyLikes(userid) {
-  try {
-    const res = await axios.post("/api/users/likes/getlikedata",{userId : userid});  setLikedData(res.data.res)
-} catch (error) {
-console.log(error)
-}
-  
-}
+  useEffect(()=>{
+    (async()=>{
+        const res = await axios.post("/api/users/userinfo", {userId: userID})
+        console.log(res)
+        setusername(res.data.userInfo.username)
+    })()
+  },[])
+
+ 
+    useEffect(()=>{
+        (async()=>{
+            try {
+                const res = await axios.post("/api/users/likes/getlikedata",{userId : userID}); 
+                setLikedData(res.data.res)
+                
+            } catch (error) {
+            console.log(error)
+            }
+              
+        })()
+    },[chargeGetLikeData])
+
+    useEffect(() => {
+        (async () => {
+          const res =  await axios.get("/api/users/post/getpostlikecount");
+          const likeCounts = res.data.getPostLikes.reduce((acc, { _id, count }) => {
+           acc[_id] = count;
+           return acc;
+         }, {});
+          setpostLikeCounts(likeCounts)
+          
+         })()
+       }, [chargeLikeCount])
 
 
-useEffect(() => {
-  (async () => {
-    const res =  await axios.get("/api/users/post/getpostlikecount");
-    const likeCounts = res.data.getPostLikes.reduce((acc, { _id, count }) => {
-     acc[_id] = count;
-     return acc;
-   }, {});
-    setpostLikeCounts(likeCounts)
-    
-   })()
- }, [chargeLikeCount])
+       useEffect(() => {
+        (async () => {
+          const res =  await axios.get("/api/users/post/getpostcommentcount");
+          const commentCounts = res.data.getPostCommentRes.reduce((acc, { _id, count }) => {
+           acc[_id] = count;
+           return acc;
+         }, {});
+          setpostCommentCounts(commentCounts)
+          
+         })()
+       }, [chargeCommentsCount])
 
-useEffect(() => {
-  (async () => {
-    const res =  await axios.get("/api/users/post/getpostcommentcount");
-    const commentCounts = res.data.getPostCommentRes.reduce((acc, { _id, count }) => {
-     acc[_id] = count;
-     return acc;
-   }, {});
-    setpostCommentCounts(commentCounts)
-    
-   })()
- }, [chargeCommentsCount])
+    async function likeHandler(id){
+        if(likedData.some((data)=> data.postId === id )){
+           const deleteRes = await axios.post("/api/users/likes/removelike",{userId : userID, postId:id })
+            setchargeLikeCount(Math.random());
+            setChargeGetLikeData(Math.random())
+        }
+        else{
+            const likeRes = await axios.post("/api/users/likes", { userId : userID, postId:id  })    
+            setchargeLikeCount(Math.random());
+            setChargeGetLikeData(Math.random())
+            
+        }
+      }
 
+     function redirectToPost(id){
+        router.push(`${location.origin}/mainDashboard/${id}`)
 
-async function likeHandler(id){
-  if(likedData.some((data)=> data.postId === id )){
-     const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.value.userId, postId:id })
-      setchargeLikeCount(Math.random());
-      setChargeGetLikeData(Math.random())
-      getMyLikes(contextData.value.userId)
-  }
-  else{
-      const likeRes = await axios.post("/api/users/likes", { userId : contextData.value.userId, postId:id  })    
-      setchargeLikeCount(Math.random());
-      setChargeGetLikeData(Math.random())
-      getMyLikes(contextData.value.userId)
+     }
 
-  }
-}
-
-async function logoutHandler() {
-  try {
-    const res = await axios.get("/api/users/logout");
-    router.push("/login")
-    console.log(res)
-  } catch (error) {
-    console.log(error)
-  }
-  
-}
-
-function redirectToPost(id ){
-  router.push(`${location.origin}/mainDashboard/${id}`)
-}
-
-function shareHandler(id) {
-  toast.success("Copied")
-  navigator.clipboard.writeText(`${location.origin}/mainDashboard/${id}`)
-}
+     function shareHandler(id) {
+        toast.success("Copied")
+        navigator.clipboard.writeText(`${location.origin}/mainDashboard/${id}`)
+      }
 
   return (
     <div className="h-[100vh] overflow-hidden" >
@@ -155,14 +154,14 @@ function shareHandler(id) {
             {/* <!-- Profile Section --> */}
             <section id="profile" className="bg-white p-6 rounded-lg shadow-md h-full">
               <div className="h-full ">
-                <div className="h-[10%] flex justify-between items-center font-bold mb-4 text-gray-900 "><h1 className="text-2xl ">{contextData.value.userName}</h1> <button onClick={logoutHandler} className="p-2 border border-gray-500  rounded-lg hover:text-white hover:bg-slate-700 hover:shadow-lg transition duration-300" >Logout</button></div>
+                <div className="h-[10%] flex justify-between items-center font-bold mb-4 text-gray-900 "><h1 className="text-2xl ">{username}</h1> </div>
                 <div className="h-[25%] flex items-center justify-between   ">
                   <div className="ms-8 h-28 rounded-full bg-gray-500 w-28 "></div>
                   <div className="me-40 flex justify-center items-center gap-10">
                     
                   <div className="w-30 flex flex-col-reverse" >
                     <h1 className="font-bold text-xl text-center text-black ">post</h1>
-                    <h1 className="text-gray-600 text-center">{myPosts.length}</h1>
+                    <h1 className="text-gray-600 text-center">{posts.length}</h1>
                   </div> 
                   <div className="w-30 flex flex-col-reverse" >
                     <h1 onClick={()=>router.push(`${location.pathname}/followers`)} className="font-bold text-xl text-center text-black cursor-pointer ">Followers</h1>
@@ -176,13 +175,13 @@ function shareHandler(id) {
                 </div>
                 
                <div className="h-[60%] mt-4 flex flex-col gap-4 overflow-y-scroll no-scrollbar rounded-lg"> 
-                {myPosts.map((post)=><div key={post._id} className="border-b border-gray-200 p-4 shadow-lg rounded-lg bg-gray-400">
-                  <h1 onClick={()=>{redirectToPost(post._id)}} className="text-xl cursor-pointer font-semibold text-gray-900 mt-5">{post.content.title}</h1>
+                {posts.map((post)=> <div  className="border-b border-gray-200 p-4 shadow-lg rounded-lg bg-gray-400">
+                  <h1  className="text-xl cursor-pointer font-semibold text-gray-900 mt-5">{post.content.title}</h1>
                   <h1 className="text-gray-700 mt-4">{post.content.message}</h1>
                   <div className="w-full mt-8">
                     <span className="flex gap-4 cursor-pointer">
                     <div className="flex flex-col items-center ">
-                    <i onClick={()=>likeHandler(post._id)} className={likedData.some((obj) => obj.postId === post._id)? "fa-solid fa-heart": "fa-regular fa-heart" }></i> 
+                    <i onClick={()=>likeHandler(post._id)} className={likedData.some((obj) => obj.postId === post._id)? "fa-solid fa-heart": "fa-regular fa-heart" } ></i> 
                     <div className="text-xs font-light">{postLikeCounts[post._id] || 0}</div>
                     </div>
                     
