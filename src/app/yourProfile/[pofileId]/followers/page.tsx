@@ -28,21 +28,6 @@ export default function Followers() {
   },[])    
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     <div className="h-[100vh] overflow-hidden" >
       <nav className="bg-white shadow-md" >
@@ -65,6 +50,7 @@ export default function Followers() {
                 <li><Link href="/addPost" className="block text-gray-700 hover:text-blue-500">Add Post</Link></li>
                 <li><Link href="/notification" className="block text-gray-700 hover:text-blue-500">Notifications</Link></li>
                 <li><Link href="/mainDashboard" className="block text-gray-700 hover:text-blue-500"> Posts</Link></li>
+                <li><Link href="/search" className="block text-gray-700 hover:text-blue-500"> Search</Link></li>
             </ul>
           </aside>
 

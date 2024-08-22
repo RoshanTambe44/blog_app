@@ -9,8 +9,8 @@ export default function Search() {
 
     const contextData = useStore();
 const [allProfileData, setallProfileData] = useState([])
-const [searchInp, setsearchInp] = useState('')
 const [follows, setFollows] = useState([])
+const [inp, setInp] = useState('')
 const [filteredData, setfilteredData] = useState([])
 
     useEffect(()=>{
@@ -37,13 +37,18 @@ const [filteredData, setfilteredData] = useState([])
      },[])
 
 
+
+
     async function getFollowData (username){
             const res = await axios.post("api/users/follow/getfollowdata", {followerId:username })
             setFollows(res.data.followDataRes)
 
          }
  
-
+    function filterProfileHandler (inp) {
+        setInp(inp)
+       setfilteredData(allProfileData.filter((data)=> data._id.includes(inp)  ))
+    }
 
 
     async function followHandler( followingUserName ) {
@@ -98,13 +103,13 @@ const [filteredData, setfilteredData] = useState([])
             <section id="global-posts" className="bg-white p-6 rounded-lg shadow-md h-full ">
               <div className='flex flex-col h-full w-full  rounded-lg'>
                 <div className="w-full h-[15%]  ">
-                    <input onChange={(e)=>setsearchInp(e.target.value)} value={searchInp} className='w-full focus:outline-none p-2 text-gray-600 rounded-full border'  type="text" placeholder='Search' /> 
+                    <input onChange={(e)=>{  filterProfileHandler(e.target.value)}}  className='w-full focus:outline-none p-2 text-gray-600 rounded-full border'  type="text" placeholder='Search' /> 
                 </div>
                 <div className="w-full h-[85%]">
                 <hr className='mb-4' />
                 
-                <div className="flex w-full h-full flex-col gap-2 overflow-scroll no-scrollbar">
-                {allProfileData.map((data)=> <div className="bg-gray-400 w-full p-2 rounded-lg flex justify-between" key={data._id}>      
+                <div className="flex w-full h-full flex-col gap-2 overflow-scroll no-scrollbar cursor-pointer">
+                {inp ? <> {filteredData.map((data)=> <div className="bg-gray-400 w-full p-2 rounded-lg flex justify-between" key={data._id}>      
                     <div className="flex gap-4">
                     <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
                      <div className="w-52 flex flex-col p-2  ">
@@ -131,7 +136,7 @@ const [filteredData, setfilteredData] = useState([])
                         {data._id === contextData.value.userName ? <></> : <> {follows.some((follow)=>follow.followingId === data._id ) ? <div onClick={()=>unfollowHandler(data._id)} className="py-2 px-4 bg-gray-200 rounded-lg font-light ">Unfollow</div>  : <div onClick={()=>followHandler(data._id)} className="py-2 px-4 bg-blue-500 rounded-lg">Follow</div>} </> }
                     </div>
 
-                    </div> )}
+                    </div> )}</> : <></>}
                 </div>
                
                 </div>
