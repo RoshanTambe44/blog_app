@@ -211,50 +211,13 @@ export default function post(req: NextRequest) {
           {/* <!-- Sidebar --> */}
           {token ? (
             <aside className="md:col-span-1 bg-white p-4 rounded-lg shadow-md ">
-              <ul className="md:flex-col flex  items-center md:items-start justify-between gap-2 md:gap-6">
-                <li>
-                  <Link
-                    href={`/yourProfile/${contextData.value.userId}`}
-                    className="block text-gray-700 hover:text-blue-500"
-                  >
-                    Your Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/addPost"
-                    className="block text-gray-700 hover:text-blue-500"
-                  >
-                    Add Post
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/notification"
-                    className="block text-gray-700 hover:text-blue-500"
-                  >
-                    Notifications
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/mainDashboard"
-                    className="block text-gray-700 hover:text-blue-500"
-                  >
-                    {" "}
-                    Posts
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/search"
-                    className="block text-gray-700 hover:text-blue-500"
-                  >
-                    {" "}
-                    Search
-                  </Link>
-                </li>
-              </ul>
+               <ul className="md:flex-col flex  items-center md:items-start justify-between  gap-2 md:gap-6">
+                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full' ><Link href={`/yourProfile/${ contextData.value.userId}`} className=" text-center text-gray-400  hover:text-gray-900 flex items-center justify-center md:justify-start"><i className="fa-regular fa-user   md:me-4 "></i><div className="hidden md:block">Profile</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lgrounded-full'><Link href="/addPost" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-square-plus  md:me-4  "></i> <div className="hidden md:block"> Add</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lg rounded-full'><Link href="/notification" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-bell  md:me-4 "></i><div className=" hidden md:block">Notifications</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full'><Link href="/mainDashboard" className="flex items-center justify-center md:justify-start text-center text-gray-400  hover:text-gray-900"><i className="fa-solid fa-house  md:me-4"></i> <div className="hidden md:block">Home</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full'><Link href="/search" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-solid fa-magnifying-glass  md:me-4 "></i> <div className="hidden md:block">Search</div></Link></li>
+            </ul>
             </aside>
           ) : (
             <></>

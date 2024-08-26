@@ -3,13 +3,15 @@ import { useStore } from "@/context/store";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 
 
 export default function Followings() {
   const router = useRouter()
   const contextData = useStore()
+  const [followings, setFollowings] = useState([]) 
+
 
 
   const userName = contextData?.value?.userName || "";
@@ -22,10 +24,17 @@ export default function Followings() {
           contextData.value.setUsername(userDataRes.data.tokenUserData.username)
           contextData.value.setUserId(userDataRes.data.tokenUserData._id)
           contextData.value.setUserEmail(userDataRes.data.tokenUserData.email)
-  
+          getFollowings(userDataRes.data.tokenUserData.username)
           
       })()
   },[])    
+
+  async function getFollowings (userId){
+  
+    const res = await axios.post("/api/users/follow/getfollowercount", {followerId:userId})
+    setFollowings(res.data.followerCountRes)
+
+  }
 
   return (
     <div className="h-[100vh] overflow-hidden" >
@@ -44,12 +53,12 @@ export default function Followings() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 ">
           {/* <!-- Sidebar --> */}
           <aside className="md:col-span-1 bg-white p-4 rounded-lg shadow-md">
-          <ul className="md:flex-col flex  items-center md:items-start justify-between gap-2 md:gap-6">
-                <li><Link href="/yourProfile" className="block text-gray-700 hover:text-blue-500">Your Profile</Link></li>
-                <li><Link href="/addPost" className="block text-gray-700 hover:text-blue-500">Add Post</Link></li>
-                <li><Link href="/notification" className="block text-gray-700 hover:text-blue-500">Notifications</Link></li>
-                <li><Link href="/mainDashboard" className="block text-gray-700 hover:text-blue-500"> Posts</Link></li>
-                <li><Link href="/search" className="block text-gray-700 hover:text-blue-500"> Search</Link></li>
+          <ul className="md:flex-col flex  items-center md:items-start justify-between  gap-2 md:gap-6">
+                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full' ><Link href={`/yourProfile/${ contextData.value.userId}`} className=" text-center text-gray-400  hover:text-gray-900 flex items-center justify-center md:justify-start"><i className="fa-regular fa-user   md:me-4 "></i><div className="hidden md:block">Profile</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lgrounded-full'><Link href="/addPost" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-square-plus  md:me-4  "></i> <div className="hidden md:block"> Add</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lg rounded-full'><Link href="/notification" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-bell  md:me-4 "></i><div className=" hidden md:block">Notifications</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full'><Link href="/mainDashboard" className="flex items-center justify-center md:justify-start text-center text-gray-400  hover:text-gray-900"><i className="fa-solid fa-house  md:me-4"></i> <div className="hidden md:block">Home</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full'><Link href="/search" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-solid fa-magnifying-glass  md:me-4 "></i> <div className="hidden md:block">Search</div></Link></li>
             </ul>
           </aside>
 
@@ -60,13 +69,13 @@ export default function Followings() {
                 <div className="w-full"><h1 className="text-2xl text-black ">Followings</h1></div>
                 <hr/>
                 <div className="flex flex-col gap-2 overflow-scroll no-scrollbar">
-                    <div className="bg-gray-600 w-full p-2 rounded-lg flex 
+                   {followings.map((data)=> <div className="bg-gray-600 w-full p-2 rounded-lg flex 
                 justify-between">      
                     
                     <div className="flex gap-4">
                     <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
                      <div className="w-40 flex flex-col p-2  ">
-                        <h1 className="text-xl ">Roshan</h1>
+                        <h1 className="text-xl ">{data.followingId}</h1>
                         <div className="w-full flex justify-between">
                             <div className="flex flex-col items-center ">
                                 <p className="text-xs">45</p>
@@ -85,111 +94,8 @@ export default function Followings() {
                         <div className="py-2 px-4 bg-blue-500 rounded-lg">Follow</div>
                     </div>
 
-                    </div>
-                    <div className="bg-gray-600 w-full p-2 rounded-lg flex 
-                justify-between">      
+                    </div>)}
                     
-                    <div className="flex gap-4">
-                    <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
-                     <div className="w-40 flex flex-col p-2  ">
-                        <h1 className="text-xl ">Roshan</h1>
-                        <div className="w-full flex justify-between">
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">45</p>
-                                <h1 className="text-sm ">Followers</h1>
-                            </div>
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">1</p>
-                                <h1 className="text-sm ">Followings</h1>
-                            </div>
-                        </div>                    
-
-                    </div>  
-                    </div>
-                    <div className="flex gap-8 items-center cursor-pointer ">
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">share</div>
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">Follow</div>
-                    </div>
-
-                    </div>
-                    <div className="bg-gray-600 w-full p-2 rounded-lg flex 
-                justify-between">      
-                    
-                    <div className="flex gap-4">
-                    <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
-                     <div className="w-40 flex flex-col p-2  ">
-                        <h1 className="text-xl ">Roshan</h1>
-                        <div className="w-full flex justify-between">
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">45</p>
-                                <h1 className="text-sm ">Followers</h1>
-                            </div>
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">1</p>
-                                <h1 className="text-sm ">Followings</h1>
-                            </div>
-                        </div>                    
-
-                    </div>  
-                    </div>
-                    <div className="flex gap-8 items-center cursor-pointer ">
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">share</div>
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">Follow</div>
-                    </div>
-
-                    </div>
-                    <div className="bg-gray-600 w-full p-2 rounded-lg flex 
-                justify-between">      
-                    
-                    <div className="flex gap-4">
-                    <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
-                     <div className="w-40 flex flex-col p-2  ">
-                        <h1 className="text-xl ">Roshan</h1>
-                        <div className="w-full flex justify-between">
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">45</p>
-                                <h1 className="text-sm ">Followers</h1>
-                            </div>
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">1</p>
-                                <h1 className="text-sm ">Followings</h1>
-                            </div>
-                        </div>                    
-
-                    </div>  
-                    </div>
-                    <div className="flex gap-8 items-center cursor-pointer ">
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">share</div>
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">Follow</div>
-                    </div>
-
-                    </div>
-                    <div className="bg-gray-600 w-full p-2 rounded-lg flex 
-                justify-between">      
-                    
-                    <div className="flex gap-4">
-                    <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
-                     <div className="w-40 flex flex-col p-2  ">
-                        <h1 className="text-xl ">Roshan</h1>
-                        <div className="w-full flex justify-between">
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">45</p>
-                                <h1 className="text-sm ">Followers</h1>
-                            </div>
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">1</p>
-                                <h1 className="text-sm ">Followings</h1>
-                            </div>
-                        </div>                    
-
-                    </div>  
-                    </div>
-                    <div className="flex gap-8 items-center cursor-pointer ">
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">share</div>
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">Follow</div>
-                    </div>
-
-                    </div>
                 </div>
                 
 
