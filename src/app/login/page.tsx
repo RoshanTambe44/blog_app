@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-export default function login() {
+export default function Login() {
    const route = useRouter();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();

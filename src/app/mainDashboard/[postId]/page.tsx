@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import React, { useEffect, useState } from "react";
 
-export default function post(req: NextRequest) {
+export default function Post(req: NextRequest) {
   const contextData = useStore();
   const [chargeGetLikeData, setChargeGetLikeData] = useState();
   const [likedData, setLikedData] = useState([]);
