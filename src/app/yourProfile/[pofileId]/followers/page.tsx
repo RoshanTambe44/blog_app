@@ -11,6 +11,7 @@ export default function Followers() {
   const router = useRouter()
   const contextData = useStore()
   const [followers, setFollowers] = useState([]) 
+  const [follows, setFollows] = useState([])
 
 
 
@@ -25,6 +26,7 @@ export default function Followers() {
           contextData.value.setUserId(userDataRes.data.tokenUserData._id)
           contextData.value.setUserEmail(userDataRes.data.tokenUserData.email)
           getFollowers(userDataRes.data.tokenUserData.username)
+          getFollowData(userDataRes.data.tokenUserData.username)
           
       })()
   },[])    
@@ -37,6 +39,32 @@ export default function Followers() {
       setFollowers(res.data.followingCountRes)
   
     }
+
+
+    async function followHandler( followingUserName ) {
+      const res = await axios.post("/api/users/follow",{followerId:contextData.value.userName, followingId:followingUserName})  
+      getFollowData(contextData.value.userName);
+      
+   }
+  
+  
+  async function unfollowHandler (unfollowingusername){
+      const res = await axios.post("/api/users/unfollow",{followerId:contextData.value.userName, followingId:unfollowingusername}) 
+      getFollowData(contextData.value.userName);
+       
+  
+  
+  }
+  
+  
+  async function getFollowData (username){
+    console.log(username);
+    (userName)
+    const res = await axios.post("/api/users/follow/getfollowdata", {followerId:username })
+    setFollows(res.data.followDataRes)
+  
+  }
+
 
   return (
     <div className="h-[100vh] overflow-hidden" >
@@ -76,24 +104,13 @@ export default function Followers() {
                     
                     <div className="flex gap-4">
                     <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
-                    <div className="w-40 flex flex-col p-2  ">
+                    <div className="w-40 flex items-center p-2  ">
                         <h1 className="text-xl ">{data.followerId}</h1>
-                        <div className="w-full flex justify-between">
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">45</p>
-                                <h1 className="text-sm ">Followers</h1>
-                            </div>
-                            <div className="flex flex-col items-center ">
-                                <p className="text-xs">1</p>
-                                <h1 className="text-sm ">Followings</h1>
-                            </div>
-                        </div>                    
-
                     </div>  
                     </div>
                     <div className="flex gap-8 items-center cursor-pointer ">
                         <div className="py-2 px-4 bg-blue-500 rounded-lg">share</div>
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">Follow</div>
+                        {follows.some((follow)=>follow.followingId === data.followerId ) ? <div onClick={()=>unfollowHandler(data.followerId)} className="py-2 px-4 bg-gray-200 rounded-lg font-light ">Unfollow</div>  : <div onClick={()=>followHandler(data.followerId)} className="py-2 px-4 bg-blue-500 rounded-lg">FollowBack</div>}
                     </div>
 
                     </div>)}
