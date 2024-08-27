@@ -230,8 +230,8 @@ export default function Post(req: NextRequest) {
               id="global-posts"
               className="bg-white p-6 rounded-lg shadow-md h-full  "
             >
-              {SinglePostData.map((post) => (
-                <div className="border-b cursor-pointer border-gray-200 p-4 shadow-lg rounded-lg h-full bg-gray-400">
+              {SinglePostData.map((post, index) => (
+                <div key={index} className="border-b cursor-pointer border-gray-200 p-4 shadow-lg rounded-lg h-full bg-gray-400">
                   <div className="h-[10%]">
                     <div className="flex items-center gap-2">
                       <div className="bg-black rounded-full h-5 w-5 text-white flex items-center justify-center ">

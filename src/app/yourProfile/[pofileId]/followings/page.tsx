@@ -100,7 +100,7 @@ async function getFollowData (username){
                 <div className="w-full"><h1 className="text-2xl text-black ">Followings</h1></div>
                 <hr/>
                 <div className="flex flex-col gap-2 overflow-scroll no-scrollbar">
-                   {followings.map((data)=> <div className="bg-gray-600 w-full p-2 rounded-lg flex 
+                   {followings.map((data, index)=> <div key={index} className="bg-gray-600 w-full p-2 rounded-lg flex 
                 justify-between">      
                     
                     <div className="flex gap-4">

@@ -109,7 +109,7 @@ const [filteredData, setfilteredData] = useState([])
                 <hr className='mb-4' />
                 
                 <div className="flex w-full h-full flex-col gap-2 overflow-scroll no-scrollbar cursor-pointer">
-                {inp ? <> {filteredData.map((data)=> <div className="bg-gray-400 w-full p-2 rounded-lg flex justify-between" key={data._id}>      
+                {inp ? <> {filteredData.map((data, index)=> <div key={index} className="bg-gray-400 w-full p-2 rounded-lg flex justify-between" key={data._id}>      
                     <div className="flex gap-4">
                     <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
                      <div className="w-52 flex flex-col p-2  ">

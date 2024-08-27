@@ -101,7 +101,7 @@ export default function Followers() {
                 <div className="w-full"><h1 className="text-2xl text-black ">Followers</h1></div>
                 <hr/>
                 <div className="flex flex-col gap-2 overflow-scroll no-scrollbar">
-                {followers.map((data)=><div className="bg-gray-600 w-full p-2 rounded-lg flex 
+                {followers.map((data, index)=><div key={index} className="bg-gray-600 w-full p-2 rounded-lg flex 
                 justify-between">      
                     
                     <div className="flex gap-4">

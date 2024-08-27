@@ -174,7 +174,7 @@ function shareHandler(id) {
             <section id="global-posts" className="bg-white p-6 rounded-lg shadow-md h-full ">
                 <h2 className="text-2xl font-bold mb-4 text-gray-900 h-[10%]"> Posts</h2>
                 <div className="space-y-4 overflow-y-scroll no-scrollbar h-[90%] rounded-lg">
-                    {postData.map((post)=><div key={post._id}  className="border-b cursor-pointer border-gray-200 p-4 shadow-lg rounded-lg bg-gray-400"  >
+                    {postData.map((post, index)=><div key={index}  className="border-b cursor-pointer border-gray-200 p-4 shadow-lg rounded-lg bg-gray-400"  >
                     
                         <div className=""><div className="flex items-center gap-2"><div className="bg-black rounded-full h-5 w-5 text-white flex items-center justify-center ">{post.username.charAt(0).toUpperCase()}</div><h1 onClick={()=>router.push(`${location.origin}/profile/${post.userId}`)} className="">{post.username}</h1></div></div>
                         <h3 className="text-xl font-semibold text-gray-900 mt-5" onClick={()=>{redirectToPost(post._id, "title")}}>{post.content.title}</h3>
