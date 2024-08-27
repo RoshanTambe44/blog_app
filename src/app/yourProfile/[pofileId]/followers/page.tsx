@@ -1,9 +1,11 @@
 "use client";
 import { useStore } from "@/context/store";
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+
 
 
 
@@ -103,7 +105,7 @@ export default function Followers() {
                 justify-between">      
                     
                     <div className="flex gap-4">
-                    <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
+                    <div className="rounded-full bg-black w-20 h-20 p"><Image src="" alt=""  /></div>
                     <div className="w-40 flex items-center p-2  ">
                         <h1 className="text-xl ">{data.followerId}</h1>
                     </div>  
