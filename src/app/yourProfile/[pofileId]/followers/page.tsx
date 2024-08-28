@@ -31,7 +31,7 @@ console.log("followers")
           getFollowData(userDataRes.data.tokenUserData.username)
           
       })()
-  },[contextData])    
+  },[])    
 
 
   async function getFollowers (userId){
@@ -60,8 +60,6 @@ console.log("followers")
   
   
   async function getFollowData (username){
-    console.log(username);
-    (userName)
     const res = await axios.post("/api/users/follow/getfollowdata", {followerId:username })
     setFollows(res.data.followDataRes)
   

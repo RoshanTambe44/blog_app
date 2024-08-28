@@ -32,7 +32,7 @@ console.log("followings");
           getFollowData(userDataRes.data.tokenUserData.username)
           
       })()
-  },[contextData])    
+  },[])    
 
   async function getFollowings (userId){
   

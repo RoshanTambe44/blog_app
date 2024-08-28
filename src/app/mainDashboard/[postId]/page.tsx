@@ -3,13 +3,12 @@ import { useStore } from "@/context/store";
 import axios from "axios";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { NextRequest } from "next/server";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import React, { useEffect, useState } from "react";
 
-export default function Post(req: NextRequest) {
+export default function Post() {
   const contextData = useStore();
   const [chargeGetLikeData, setChargeGetLikeData] = useState();
   const [likedData, setLikedData] = useState([]);
