@@ -10,21 +10,42 @@ import React, { useEffect, useState } from "react";
 
 export default function Post() {
   const contextData = useStore();
-  const [chargeGetLikeData, setChargeGetLikeData] = useState();
-  const [likedData, setLikedData] = useState([]);
+  const [chargeGetLikeData, setChargeGetLikeData] = useState<number>();
+  const [likedData, setLikedData] = useState<LikeData[]>([]);
   const [comment, setComment] = useState("");
-  const [commentData, setCommentData] = useState([]);
-  const [SinglePostData, setSinglePostData] = useState([]);
-  const [randomNumber, setrandomNumber] = useState();
-  const [postLikeCounts, setpostLikeCounts] = useState([]);
+  const [commentData, setCommentData] = useState<commentData[]>([]);
+  const [SinglePostData, setSinglePostData] = useState<singlePostData[]>([]);
+  const [randomNumber, setrandomNumber] = useState<number>();
+  const [postLikeCounts, setpostLikeCounts] = useState<postLikeCount[]>([]);
   const [postCommentCounts, setpostCommentCounts] = useState([]);
-  const [chargeLikeCount, setchargeLikeCount] = useState();
-  const [chargeCommentsCount, setchargeCommentsCount] = useState();
+  const [chargeLikeCount, setchargeLikeCount] = useState<number>(0);
+  const [chargeCommentsCount, setchargeCommentsCount] = useState<number>(0);
   const [token, settoken] = useState(true);
   const router = useRouter();
   const param = useParams();
-  const postId = param.postId || 0;
+  const postId: string = param.postId || '';
+
+  interface commentData{
+    userName: string;
+    commentContent: string 
+  }
+
+  interface LikeData {
+    postId: string;
+    
+  }
+
+  interface singlePostData{
+    _id:string
+    username: string;
+    content: {title:string,  message: string};
+  }
+
+  interface postLikeCount{
+    postId : string
+  }
  console.log("mainDashboard/[postId]")
+
   useEffect(() => {
     (async () => {
       try {
@@ -45,10 +66,16 @@ export default function Post() {
     })();
   },[contextData]);
 
+
+  interface PostLike {
+    _id: string;
+    count: number;
+  }
+  
   useEffect(() => {
     (async () => {
       const res = await axios.get("/api/users/post/getpostlikecount");
-      const likeCounts = res.data.getPostLikes.reduce((acc: any, { _id, count }) => {
+      const likeCounts = res.data.getPostLikes.reduce((acc: any, { _id, count }:PostLike) => {
         acc[_id] = count;
         return acc;
       }, {});
@@ -60,7 +87,7 @@ export default function Post() {
     (async () => {
       const res = await axios.get("/api/users/post/getpostcommentcount");
       const commentCounts = res.data.getPostCommentRes.reduce(
-        (acc, { _id, count }) => {
+        (acc: any, { _id, count }:PostLike) => {
           acc[_id] = count;
           return acc;
         },
@@ -96,7 +123,7 @@ export default function Post() {
     })();
   }, [contextData.userId]);
 
-  async function likeHandler(id) {
+  async function likeHandler(id:any) {
     if (token) {
       if (likedData.some((data) => data.postId === id)) {
         console.log("remove");
@@ -104,7 +131,7 @@ export default function Post() {
           userId: contextData.userId,
           postId: id,
         });
-        setchargeLikeCount(Math.random());
+        setchargeLikeCount(Math.random()) ;
         setChargeGetLikeData(Math.random());
       } else {
         console.log("add");
@@ -134,7 +161,7 @@ export default function Post() {
     }
   }
 
-  async function comentSend(e) {
+  async function comentSend(e: any) {
     e.preventDefault();
 
     try {
@@ -152,7 +179,7 @@ export default function Post() {
     }
   }
 
-  function registerHandler(e) {
+  function registerHandler(e:any) {
     e.preventDefault();
     router.push("/register");
   }
