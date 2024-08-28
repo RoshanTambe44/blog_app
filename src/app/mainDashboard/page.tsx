@@ -18,13 +18,13 @@ export default function MainDashboard() {
     
     const router = useRouter()
     const contextData = useStore();
-    const [postData, setPostData] = useState([])
-    const [likedData, setLikedData] = useState([])
+    const [postData, setPostData] = useState<[]>([])
+    const [likedData, setLikedData] = useState<[]>([])
     const [chargeGetLikeData, setChargeGetLikeData] = useState()
-    const [chargeLikeCount, setchargeLikeCount] = useState()
+    const [chargeLikeCount, setchargeLikeCount] = useState<string>()
     const [chargeCommentsCount, setchargeCommentsCount] = useState()
-    const [postLikeCounts, setpostLikeCounts] = useState([])
-    const [postCommentCounts, setpostCommentCounts] = useState([])
+    const [postLikeCounts, setpostLikeCounts] = useState<[]>([])
+    const [postCommentCounts, setpostCommentCounts] = useState<[]>([])
 
 
 

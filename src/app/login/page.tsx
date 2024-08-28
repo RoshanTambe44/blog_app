@@ -13,8 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function Login() {
    const route = useRouter();
     const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [emailPass, setEmailPass] = useState('');
+    const [password, setPassword] = useState<string>();
+    const [emailPass, setEmailPass] = useState<string | null> (null);
     const [passwordEye1, setpasswordEye1] = useState(true)
 
 
