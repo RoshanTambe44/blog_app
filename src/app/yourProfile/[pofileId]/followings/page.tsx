@@ -1,7 +1,6 @@
 "use client";
 import { useStore } from "@/context/store";
 import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -15,7 +14,7 @@ export default function Followings() {
 const [follows, setFollows] = useState([])
 
 
-console.log(follows,followings);
+console.log("followings");
 
 
 
@@ -33,7 +32,7 @@ console.log(follows,followings);
           getFollowData(userDataRes.data.tokenUserData.username)
           
       })()
-  },[])    
+  },[contextData])    
 
   async function getFollowings (userId){
   
@@ -104,7 +103,7 @@ async function getFollowData (username){
                 justify-between">      
                     
                     <div className="flex gap-4">
-                    <div className="rounded-full bg-black w-20 h-20 p"><Image src="" alt=""  /></div>
+                    <div className="rounded-full bg-black w-20 h-20 p"></div>
                      <div className="w-40 flex items-center p-2  ">
                         <h1 className="text-xl ">{data.followingId}</h1>
                     </div>  

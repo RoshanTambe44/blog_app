@@ -15,7 +15,7 @@ export default function Followers() {
   const [followers, setFollowers] = useState([]) 
   const [follows, setFollows] = useState([])
 
-
+console.log("followers")
 
   const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
@@ -31,7 +31,7 @@ export default function Followers() {
           getFollowData(userDataRes.data.tokenUserData.username)
           
       })()
-  },[])    
+  },[contextData])    
 
 
   async function getFollowers (userId){

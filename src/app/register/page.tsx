@@ -21,6 +21,8 @@ export default function Register() {
  const [passwordEye1, setpasswordEye1] = useState(true)
  const [passwordEye2, setpasswordEye2] = useState(true)
   const contextData = useStore()
+  console.log("register");
+  
   
   
   
@@ -28,12 +30,12 @@ export default function Register() {
 
     
 
-useEffect(()=>{userNameChack()},[username])
+useEffect(()=>{userNameChack()},[])
 
 
 async function userNameChack ()  {setUserNameState(  await axios.post('/api/users/usernamematch', {username})); }
 
-useEffect(()=>{emailCheckFunc()},[email])
+useEffect(()=>{emailCheckFunc()},[])
 
 async function emailCheckFunc ()  {  setEmailCheck ( await axios.post("/api/users/login", {email})) ; }
 

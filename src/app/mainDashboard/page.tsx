@@ -29,21 +29,17 @@ export default function MainDashboard() {
 
 
 useEffect(()=>{
-    console.log("first");
     
     (async()=>{
         const userDataRes = await axios.get("api/users/me");
-        console.log(userDataRes.data.tokenUserData)
         contextData.setUsername(userDataRes.data.tokenUserData.username)
         contextData.setUserId(userDataRes.data.tokenUserData._id)
         contextData.setUserEmail(userDataRes.data.tokenUserData.email)
         getAllLIkes(userDataRes.data.tokenUserData._id)
     })()
-},[])
+},[contextData])
 
 useEffect(()=>{
-    console.log("second")
-    console.log(contextData.userId)
    ; ( async ()=>{
         try {
             const res = await axios.get("/api/users/post/getpost");
@@ -54,7 +50,7 @@ useEffect(()=>{
              console.log(error)
             }
     })();
-},[])    
+},[contextData.userId])    
 
 
 
@@ -66,7 +62,6 @@ useEffect(() => {
     return acc;
   }, {});
    setpostLikeCounts(likeCounts)
-   console.log(likeCounts);
    
   })()
 }, [chargeLikeCount])
@@ -86,7 +81,7 @@ useEffect(() => {
 async function getAllLIkes(userid) {
     try {   
         const res = await axios.post("/api/users/likes/getlikedata",{userId : userid});  setLikedData(res.data.res)
-        console.log(res.data.res)
+        
 } catch (error) {
     console.log(error)
 }
@@ -110,12 +105,7 @@ async function likeHandler(id){
 }
 
 
-// function commentHandler (id) {
-        
-//    contextData.setCommentVisibleId(true)
-    
 
-// }
  function redirectToPost(id, type ){
 
     if(type === "title"){
@@ -141,7 +131,6 @@ function shareHandler(id) {
 
     const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
-    console.log(postData)
 
   return (
     <div className='h-[100vh] overflow-hidden'><nav className="bg-white shadow-md " >

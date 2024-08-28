@@ -21,6 +21,7 @@ export default function Profile() {
   const [postLikeCounts, setpostLikeCounts] = useState([])
   const [postCommentCounts, setpostCommentCounts] = useState([])
   const [chargeCommentsCount, setchargeCommentsCount] = useState()
+  console.log("profile/profileId")
 
 
 
@@ -42,7 +43,7 @@ export default function Profile() {
   
           
       })()
-  },[])   
+  },[contextData])   
   
   useEffect(()=>{
     (async()=>{
@@ -50,7 +51,7 @@ export default function Profile() {
         console.log(res.data.getMyPosts)
         setposts(res.data.getMyPosts)
     })()
-  },[])
+  },[userID])
 
   useEffect(()=>{
     (async()=>{
@@ -58,7 +59,7 @@ export default function Profile() {
         console.log(res)
         setusername(res.data.userInfo.username)
     })()
-  },[])
+  },[userID])
 
  
     useEffect(()=>{
@@ -72,7 +73,7 @@ export default function Profile() {
             }
               
         })()
-    },[chargeGetLikeData])
+    },[userID])
 
     useEffect(() => {
         (async () => {

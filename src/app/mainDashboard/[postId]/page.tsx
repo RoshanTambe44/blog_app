@@ -25,12 +25,11 @@ export default function Post(req: NextRequest) {
   const router = useRouter();
   const param = useParams();
   const postId = param.postId || 0;
-
+ console.log("mainDashboard/[postId]")
   useEffect(() => {
     (async () => {
       try {
         const userDataRes = await axios.get("/api/users/me");
-        console.log(userDataRes);
         if (userDataRes.data.tokenUserData) {
           contextData.setUsername(
             userDataRes.data.tokenUserData.username
@@ -45,7 +44,7 @@ export default function Post(req: NextRequest) {
         console.log(error);
       }
     })();
-  }, []);
+  },[contextData]);
 
   useEffect(() => {
     (async () => {
@@ -83,7 +82,7 @@ export default function Post(req: NextRequest) {
         console.log(error);
       }
     })();
-  }, []);
+  },[postId]);
 
   useEffect(() => {
     (async () => {
@@ -96,7 +95,7 @@ export default function Post(req: NextRequest) {
         console.log(error);
       }
     })();
-  }, [chargeGetLikeData]);
+  }, [contextData.userId]);
 
   async function likeHandler(id) {
     if (token) {
@@ -106,7 +105,6 @@ export default function Post(req: NextRequest) {
           userId: contextData.userId,
           postId: id,
         });
-        console.log(deleteRes);
         setchargeLikeCount(Math.random());
         setChargeGetLikeData(Math.random());
       } else {
@@ -117,7 +115,6 @@ export default function Post(req: NextRequest) {
         });
         setchargeLikeCount(Math.random());
         setChargeGetLikeData(Math.random());
-        console.log(likeRes);
       }
     } else {
       router.push("/register");
@@ -173,7 +170,7 @@ export default function Post(req: NextRequest) {
       });
       setCommentData(res.data.getCommentRes.reverse());
     })();
-  }, [randomNumber]);
+  }, [postId]);
 
   const userName = contextData?.userName || "";
   const firstLatter = userName.charAt(0).toUpperCase();

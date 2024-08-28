@@ -22,6 +22,7 @@ export default function YourProfile() {
   const [followings, setFollowings] = useState([]) 
   const [followers, setFollowers] = useState([]) 
 
+console.log("your profile");
 
   const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
@@ -40,7 +41,7 @@ export default function YourProfile() {
   
           
       })()
-  },[])    
+  },[contextData])    
 
 
 

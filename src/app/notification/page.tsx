@@ -10,7 +10,7 @@ export default function Notification() {
   const contextData = useStore()
   const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
-
+ console.log("notification")
     useEffect(()=>{
      ; (async()=>{
           const userDataRes = await axios.get("api/users/me");
@@ -20,7 +20,7 @@ export default function Notification() {
   
           
       })();
-  },[])
+  },[contextData])
 
   return (
     <div className="h-[100vh] overflow-hidden">

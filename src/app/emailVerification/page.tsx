@@ -19,7 +19,7 @@ useEffect(() => {
   if (localStorageVar) {
     setOtp(localStorageVar);
   }
-}); 
+},[contextData.userVerificationOtp]); 
 
 
 

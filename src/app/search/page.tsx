@@ -2,19 +2,20 @@
 
 import { useStore } from '@/context/store'
 import axios from 'axios';
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 
 export default function Search() {
 
-    const contextData = useStore();
+    console.log("search")
+    const contextData = useStore(); 
 const [allProfileData, setallProfileData] = useState([])
 const [follows, setFollows] = useState([])
 const [inp, setInp] = useState('')
 const [filteredData, setfilteredData] = useState([])
 
     useEffect(()=>{
-        console.log("first");
         
         (async()=>{
             const userDataRes = await axios.get("api/users/me");
@@ -23,7 +24,7 @@ const [filteredData, setfilteredData] = useState([])
             contextData.setUserEmail(userDataRes.data.tokenUserData.email)
             getFollowData(userDataRes.data.tokenUserData.username)
         })()
-    },[])
+    },[contextData])
 
 
 
@@ -109,9 +110,9 @@ const [filteredData, setfilteredData] = useState([])
                 <hr className='mb-4' />
                 
                 <div className="flex w-full h-full flex-col gap-2 overflow-scroll no-scrollbar cursor-pointer">
-                {inp ? <> {filteredData.map((data, index)=> <div key={index} className="bg-gray-400 w-full p-2 rounded-lg flex justify-between" key={data._id}>      
+                {inp ? <> {filteredData.map((data, index)=> <div key={index} className="bg-gray-400 w-full p-2 rounded-lg flex justify-between" >      
                     <div className="flex gap-4">
-                    <div className="rounded-full bg-black w-20 h-20 p"><img src="" alt=""  /></div>
+                    <div className="rounded-full bg-black w-20 h-20 p"><Image src="" alt=""  /></div>
                      <div className="w-52 flex flex-col p-2  ">
                         <h1 className="text-xl ">{data._id}</h1> 
                         <div className="w-full flex justify-between">
