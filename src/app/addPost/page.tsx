@@ -107,7 +107,7 @@ export default function AddPost() {
 
             <div className="mb-4">
                 <label htmlFor="content" className="block text-gray-700 text-sm font-bold mb-2">Content</label>
-                <JoditEditor value={message} onChange={(e)=>setMessage(e)} className="shadow appearance-none border rounded w-full  text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required ></JoditEditor>
+                <JoditEditor value={message} onChange={(e)=>setMessage(e)} className="shadow appearance-none border rounded w-full  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  ></JoditEditor>
                
             </div>
             <div className="mb-4">
