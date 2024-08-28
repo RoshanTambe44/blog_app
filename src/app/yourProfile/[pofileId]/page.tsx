@@ -23,16 +23,16 @@ export default function YourProfile() {
   const [followers, setFollowers] = useState([]) 
 
 
-  const userName = contextData?.value?.userName || "";
+  const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
 
 
     useEffect(()=>{
       (async()=>{
           const userDataRes = await axios.get("/api/users/me");
-          contextData.value.setUsername(userDataRes.data.tokenUserData.username)
-          contextData.value.setUserId(userDataRes.data.tokenUserData._id)
-          contextData.value.setUserEmail(userDataRes.data.tokenUserData.email)
+          contextData.setUsername(userDataRes.data.tokenUserData.username)
+          contextData.setUserId(userDataRes.data.tokenUserData._id)
+          contextData.setUserEmail(userDataRes.data.tokenUserData.email)
           getMyPosts(userDataRes.data.tokenUserData._id)
           getMyLikes(userDataRes.data.tokenUserData._id)
           getFollowingsCount(userDataRes.data.tokenUserData.username)
@@ -110,16 +110,16 @@ useEffect(() => {
 
 async function likeHandler(id){
   if(likedData.some((data)=> data.postId === id )){
-     const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.value.userId, postId:id })
+     const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.userId, postId:id })
       setchargeLikeCount(Math.random());
       setChargeGetLikeData(Math.random())
-      getMyLikes(contextData.value.userId)
+      getMyLikes(contextData.userId)
   }
   else{
-      const likeRes = await axios.post("/api/users/likes", { userId : contextData.value.userId, postId:id  })    
+      const likeRes = await axios.post("/api/users/likes", { userId : contextData.userId, postId:id  })    
       setchargeLikeCount(Math.random());
       setChargeGetLikeData(Math.random())
-      getMyLikes(contextData.value.userId)
+      getMyLikes(contextData.userId)
 
   }
 }
@@ -162,7 +162,7 @@ function shareHandler(id) {
           {/* <!-- Sidebar --> */}
           <aside className="md:col-span-1 bg-white p-4 rounded-lg shadow-md">
           <ul className="md:flex-col flex  items-center md:items-start justify-between  gap-2 md:gap-6">
-                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full' ><Link href={`/yourProfile/${ contextData.value.userId}`} className=" text-center text-gray-400  hover:text-gray-900 flex items-center justify-center md:justify-start"><i className="fa-regular fa-user   md:me-4 "></i><div className="hidden md:block">Profile</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full' ><Link href={`/yourProfile/${ contextData.userId}`} className=" text-center text-gray-400  hover:text-gray-900 flex items-center justify-center md:justify-start"><i className="fa-regular fa-user   md:me-4 "></i><div className="hidden md:block">Profile</div></Link></li>
                 <li className='md:px-4 md:py-2 w-full text-lgrounded-full'><Link href="/addPost" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-square-plus  md:me-4  "></i> <div className="hidden md:block"> Add</div></Link></li>
                 <li className='md:px-4 md:py-2 w-full text-lg rounded-full'><Link href="/notification" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-bell  md:me-4 "></i><div className=" hidden md:block">Notifications</div></Link></li>
                 <li className='md:px-4 md:py-2 w-full text-lg  rounded-full'><Link href="/mainDashboard" className="flex items-center justify-center md:justify-start text-center text-gray-400  hover:text-gray-900"><i className="fa-solid fa-house  md:me-4"></i> <div className="hidden md:block">Home</div></Link></li>
@@ -175,7 +175,7 @@ function shareHandler(id) {
             {/* <!-- Profile Section --> */}
             <section id="profile" className="bg-white p-6 rounded-lg shadow-md h-full">
               <div className="h-full ">
-                <div className="h-[10%] flex justify-between items-center font-bold mb-4 text-gray-900 "><h1 className="text-2xl ">{contextData.value.userName}</h1> <button onClick={logoutHandler} className="p-2 border border-gray-500  rounded-lg hover:text-white hover:bg-slate-700 hover:shadow-lg transition duration-300" >Logout</button></div>
+                <div className="h-[10%] flex justify-between items-center font-bold mb-4 text-gray-900 "><h1 className="text-2xl ">{contextData.userName}</h1> <button onClick={logoutHandler} className="p-2 border border-gray-500  rounded-lg hover:text-white hover:bg-slate-700 hover:shadow-lg transition duration-300" >Logout</button></div>
                 <div className="h-[25%] flex items-center justify-between   ">
                   <div className="ms-8 h-28 rounded-full bg-gray-500 w-28 "></div>
                   <div className="me-40 flex justify-center items-center gap-10">

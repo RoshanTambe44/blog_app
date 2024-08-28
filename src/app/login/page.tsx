@@ -21,14 +21,14 @@ export default function Login() {
     const contextData = useStore();
 
 
-   async function loginHandler(e){
+   async function loginHandler(e: any){
     e.preventDefault();
      try {
        const res = await axios.post("/api/users/login", {email, password } )
        
        if(res.data.success){
-        contextData.value.setUserId(res.data.userData._id)
-        contextData.value.setUsername(res.data.userData.username)
+        contextData.setUserId(res.data.userData._id)
+        contextData.setUsername(res.data.userData.username)
           route.push('/mainDashboard')
        }
        else{
@@ -62,7 +62,7 @@ export default function Login() {
         <form action="/login" method="POST">
             <div className="mb-4">
                 <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Email</label>
-                <input type="email" onChange={(e)=>setEmail(e.target.value)} id="email" name="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />{emailPass === "wrong email" ?<h1 className="text-red-500 text-sm">wrong email</h1>:<></>}
+                <input type="email" onChange={(e: any )=>setEmail(e.target.value)} id="email" name="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />{emailPass === "wrong email" ?<h1 className="text-red-500 text-sm">wrong email</h1>:<></>}
             </div>
             <div className="mb-4">
                 <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Password <span className='cursor-pointer ms-2' onClick={passwordEye} ><i className={passwordEye1 ? "fa-regular fa-eye-slash" : "fa-regular fa-eye"}></i></span></label>

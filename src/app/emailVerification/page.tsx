@@ -15,7 +15,7 @@ const route = useRouter()
 
 
 useEffect(() => {
-  const localStorageVar = contextData.value.userVerificationOtp
+  const localStorageVar : any  = contextData.userVerificationOtp
   if (localStorageVar) {
     setOtp(localStorageVar);
   }
@@ -25,9 +25,9 @@ useEffect(() => {
 
 
 
-async function verifyApiHandler(e){
+async function verifyApiHandler(e: any ){
   e.preventDefault()
-const local = contextData.value.userEmail
+const local = contextData.userEmail
 
 if(otp == inpOtp){
   try {

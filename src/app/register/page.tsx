@@ -58,8 +58,8 @@ useEffect(() => {
             if(password == conformPass ) {
               const otp = Math. floor(Math. random() * (9999 - 1000 + 1)) + 1000 
               
-              contextData.value.setUserVerificationOtp(otp)
-              contextData.value.setUserEmail(email)
+              contextData.setUserVerificationOtp(otp)
+              contextData.setUserEmail(email)
               
               
 

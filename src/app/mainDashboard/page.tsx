@@ -34,16 +34,16 @@ useEffect(()=>{
     (async()=>{
         const userDataRes = await axios.get("api/users/me");
         console.log(userDataRes.data.tokenUserData)
-        contextData.value.setUsername(userDataRes.data.tokenUserData.username)
-        contextData.value.setUserId(userDataRes.data.tokenUserData._id)
-        contextData.value.setUserEmail(userDataRes.data.tokenUserData.email)
+        contextData.setUsername(userDataRes.data.tokenUserData.username)
+        contextData.setUserId(userDataRes.data.tokenUserData._id)
+        contextData.setUserEmail(userDataRes.data.tokenUserData.email)
         getAllLIkes(userDataRes.data.tokenUserData._id)
     })()
 },[])
 
 useEffect(()=>{
     console.log("second")
-    console.log(contextData.value.userId)
+    console.log(contextData.userId)
    ; ( async ()=>{
         try {
             const res = await axios.get("/api/users/post/getpost");
@@ -95,16 +95,16 @@ async function getAllLIkes(userid) {
 
 async function likeHandler(id){
     if(likedData.some((data)=> data.postId === id )){
-       const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.value.userId, postId:id })
+       const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.userId, postId:id })
         setChargeGetLikeData(Math.random())
         setchargeLikeCount(Math.random());
-        getAllLIkes(contextData.value.userId)
+        getAllLIkes(contextData.userId)
     }
     else{
-        const likeRes = await axios.post("/api/users/likes", { userId : contextData.value.userId, postId:id  })    
+        const likeRes = await axios.post("/api/users/likes", { userId : contextData.userId, postId:id  })    
         setChargeGetLikeData(Math.random())
         setchargeLikeCount(Math.random());
-        getAllLIkes(contextData.value.userId)
+        getAllLIkes(contextData.userId)
 
     }
 }
@@ -112,20 +112,20 @@ async function likeHandler(id){
 
 // function commentHandler (id) {
         
-//    contextData.value.setCommentVisibleId(true)
+//    contextData.setCommentVisibleId(true)
     
 
 // }
  function redirectToPost(id, type ){
 
     if(type === "title"){
-        if(contextData.value.commentVisibleId ){
-            contextData.value.setCommentVisibleId(false)
+        if(contextData.commentVisibleId ){
+            contextData.setCommentVisibleId(false)
         }
     }
     else{
-        if(!contextData.value.commentVisibleId ){
-            contextData.value.setCommentVisibleId(true)
+        if(!contextData.commentVisibleId ){
+            contextData.setCommentVisibleId(true)
         }
     }
     router.push(`mainDashboard/${id}`)
@@ -139,7 +139,7 @@ function shareHandler(id) {
     navigator.clipboard.writeText(`${location.href}/${id}`)
 }
 
-    const userName = contextData?.value?.userName || "";
+    const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
     console.log(postData)
 
@@ -160,7 +160,7 @@ function shareHandler(id) {
         {/* <!-- Sidebar --> */}
         <aside className=" md:col-span-1 bg-white p-4 rounded-lg shadow-md ">
             <ul className="md:flex-col flex  items-center md:items-start justify-between  gap-2 md:gap-6">
-                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full' ><Link href={`/yourProfile/${ contextData.value.userId}`} className=" text-center text-gray-400  hover:text-gray-900 flex items-center justify-center md:justify-start"><i className="fa-regular fa-user   md:me-4 "></i><div className="hidden md:block">Profile</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full' ><Link href={`/yourProfile/${ contextData.userId}`} className=" text-center text-gray-400  hover:text-gray-900 flex items-center justify-center md:justify-start"><i className="fa-regular fa-user   md:me-4 "></i><div className="hidden md:block">Profile</div></Link></li>
                 <li className='md:px-4 md:py-2 w-full text-lgrounded-full'><Link href="/addPost" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-square-plus  md:me-4  "></i> <div className="hidden md:block"> Add</div></Link></li>
                 <li className='md:px-4 md:py-2 w-full text-lg rounded-full'><Link href="/notification" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-bell  md:me-4 "></i><div className=" hidden md:block">Notifications</div></Link></li>
                 <li className='md:px-4 md:py-2 w-full text-lg  rounded-full'><Link href="/mainDashboard" className="flex items-center justify-center md:justify-start text-center text-gray-400  hover:text-gray-900"><i className="fa-solid fa-house  md:me-4"></i> <div className="hidden md:block">Home</div></Link></li>

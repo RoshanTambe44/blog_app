@@ -15,7 +15,7 @@ export default function AddPost() {
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
     const [category, setCategory] = useState('');
-    const userName = contextData?.value?.userName || "";
+    const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
 
 
@@ -23,9 +23,9 @@ export default function AddPost() {
         (async()=>{
             try {
                 const userDataRes = await axios.get("api/users/me");
-            contextData.value.setUsername(userDataRes.data.tokenUserData.username)
-            contextData.value.setUserId(userDataRes.data.tokenUserData._id)
-            contextData.value.setUserEmail(userDataRes.data.tokenUserData.email)
+            contextData.setUsername(userDataRes.data.tokenUserData.username)
+            contextData.setUserId(userDataRes.data.tokenUserData._id)
+            contextData.setUserEmail(userDataRes.data.tokenUserData.email)
             } catch (error) {
                 console.log(error)
             }
@@ -34,15 +34,15 @@ export default function AddPost() {
         })()
     })
 
-    async function postHandler (e){
+    async function postHandler (e :any){
         e.preventDefault()
         try {
 
            if(title){
            if(title.length > 5 ){
             if(message){
-                if(contextData.value.userId){
-                    const res = await axios.post('/api/users/post/addpost', {userId:contextData.value.userId, username:contextData.value.userName,  content: {title, message }})
+                if(contextData.userId){
+                    const res = await axios.post('/api/users/post/addpost', {userId:contextData.userId, username:contextData.userName,  content: {title, message }})
                     toast.success("Post Uploded")
                 setTitle("")
                 setMessage("")
@@ -85,7 +85,7 @@ export default function AddPost() {
         {/* <!-- Sidebar --> */}
         <aside className="md:col-span-1 bg-white p-4 rounded-lg shadow-md">
         <ul className="md:flex-col flex  items-center md:items-start justify-between  gap-2 md:gap-6">
-                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full' ><Link href={`/yourProfile/${ contextData.value.userId}`} className=" text-center text-gray-400  hover:text-gray-900 flex items-center justify-center md:justify-start"><i className="fa-regular fa-user   md:me-4 "></i><div className="hidden md:block">Profile</div></Link></li>
+                <li className='md:px-4 md:py-2 w-full text-lg  rounded-full' ><Link href={`/yourProfile/${ contextData.userId}`} className=" text-center text-gray-400  hover:text-gray-900 flex items-center justify-center md:justify-start"><i className="fa-regular fa-user   md:me-4 "></i><div className="hidden md:block">Profile</div></Link></li>
                 <li className='md:px-4 md:py-2 w-full text-lgrounded-full'><Link href="/addPost" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-square-plus  md:me-4  "></i> <div className="hidden md:block"> Add</div></Link></li>
                 <li className='md:px-4 md:py-2 w-full text-lg rounded-full'><Link href="/notification" className="flex items-center text-center justify-center md:justify-start text-gray-400  hover:text-gray-900"><i className="fa-regular fa-bell  md:me-4 "></i><div className=" hidden md:block">Notifications</div></Link></li>
                 <li className='md:px-4 md:py-2 w-full text-lg  rounded-full'><Link href="/mainDashboard" className="flex items-center justify-center md:justify-start text-center text-gray-400  hover:text-gray-900"><i className="fa-solid fa-house  md:me-4"></i> <div className="hidden md:block">Home</div></Link></li>
@@ -107,7 +107,7 @@ export default function AddPost() {
 
             <div className="mb-4">
                 <label htmlFor="content" className="block text-gray-700 text-sm font-bold mb-2">Content</label>
-                <JoditEditor id="content" name="content" value={message} onChange={(e)=>setMessage(e)} className="shadow appearance-none border rounded w-full  text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required ></JoditEditor>
+                <JoditEditor id ="content" name="content" value={message} onChange={(e)=>setMessage(e)} className="shadow appearance-none border rounded w-full  text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required ></JoditEditor>
                
             </div>
             <div className="mb-4">
