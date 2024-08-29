@@ -12,17 +12,33 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function YourProfile() {
   const router = useRouter()
   const contextData = useStore()
-  const [myPosts, setmyPosts] = useState([])
-  const [likedData, setLikedData] = useState([])
-  const [postLikeCounts, setpostLikeCounts] = useState([])
-  const [postCommentCounts, setpostCommentCounts] = useState([])
-  const [chargeGetLikeData, setChargeGetLikeData] = useState()
+  const [myPosts, setmyPosts] = useState<postdata[]>([])
+  const [likedData, setLikedData] = useState<likeData[]>([])
+  const [postLikeCounts, setpostLikeCounts] = useState<Record<string, number>>({})
+  const [postCommentCounts, setpostCommentCounts] = useState<Record<string, number>>({})
+  const [chargeGetLikeData, setChargeGetLikeData] = useState<number>()
   const [chargeCommentsCount, setchargeCommentsCount] = useState()
-  const [chargeLikeCount, setchargeLikeCount] = useState() 
+  const [chargeLikeCount, setchargeLikeCount] = useState<number>() 
   const [followings, setFollowings] = useState([]) 
   const [followers, setFollowers] = useState([]) 
 
 console.log("your profile");
+
+interface PostLike {
+  _id: string,
+  count: number
+}
+
+interface likeData {
+  postId: string
+}
+
+interface postdata {
+  _id :string,
+  username: string,
+  userId:string,
+  content:{message:string, title: string}
+}
 
   const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
@@ -46,7 +62,7 @@ console.log("your profile");
 
 
 
-async function getMyPosts(userid) {
+async function getMyPosts(userid:string | undefined) {
  try {
     const myData = await axios.post("/api/users/post/getmypost", {userId: userid})
     setmyPosts(myData.data.getMyPosts.reverse())
@@ -58,7 +74,7 @@ async function getMyPosts(userid) {
   
 }
 
-async function getMyLikes(userid) {
+async function getMyLikes(userid:string | undefined) {
   try {
     const res = await axios.post("/api/users/likes/getlikedata",{userId : userid});  setLikedData(res.data.res)
 } catch (error) {
@@ -68,14 +84,14 @@ console.log(error)
 }
 
 
-async function getFollowingsCount (userId){
+async function getFollowingsCount (userId:string | undefined){
   
     const res = await axios.post("/api/users/follow/getfollowercount", {followerId:userId})
     setFollowings(res.data.followerCountRes)
 
   }
 
-async function getFollowersCount (userId){
+async function getFollowersCount (userId:string | undefined){
   console.log(userId)
   
     const res = await axios.post("/api/users/follow/getfollowingcount", {followingId:userId})
@@ -87,7 +103,7 @@ async function getFollowersCount (userId){
 useEffect(() => {
   (async () => {
     const res =  await axios.get("/api/users/post/getpostlikecount");
-    const likeCounts = res.data.getPostLikes.reduce((acc, { _id, count }) => {
+    const likeCounts = res.data.getPostLikes.reduce((acc: Record<string, number>, { _id, count }:PostLike) => {
      acc[_id] = count;
      return acc;
    }, {});
@@ -99,7 +115,7 @@ useEffect(() => {
 useEffect(() => {
   (async () => {
     const res =  await axios.get("/api/users/post/getpostcommentcount");
-    const commentCounts = res.data.getPostCommentRes.reduce((acc, { _id, count }) => {
+    const commentCounts = res.data.getPostCommentRes.reduce((acc: Record<string, number>, { _id, count }:PostLike) => {
      acc[_id] = count;
      return acc;
    }, {});
@@ -109,7 +125,7 @@ useEffect(() => {
  }, [chargeCommentsCount])
 
 
-async function likeHandler(id){
+async function likeHandler(id:string){
   if(likedData.some((data)=> data.postId === id )){
      const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.userId, postId:id })
       setchargeLikeCount(Math.random());
@@ -136,11 +152,11 @@ async function logoutHandler() {
   
 }
 
-function redirectToPost(id ){
+function redirectToPost(id:string ){
   router.push(`${location.origin}/mainDashboard/${id}`)
 }
 
-function shareHandler(id) {
+function shareHandler(id:string) {
   toast.success("Copied")
   navigator.clipboard.writeText(`${location.origin}/mainDashboard/${id}`)
 }

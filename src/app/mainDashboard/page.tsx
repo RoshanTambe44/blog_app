@@ -18,15 +18,36 @@ export default function MainDashboard() {
     
     const router = useRouter()
     const contextData = useStore();
-    const [postData, setPostData] = useState<[]>([])
-    const [likedData, setLikedData] = useState<[]>([])
-    const [chargeGetLikeData, setChargeGetLikeData] = useState()
-    const [chargeLikeCount, setchargeLikeCount] = useState<string>()
+    const [postData, setPostData] = useState<postdata[]>([])
+    const [likedData, setLikedData] = useState<likeData[]>([])
+    const [chargeGetLikeData, setChargeGetLikeData] = useState<number>()
+    const [chargeLikeCount, setchargeLikeCount] = useState<number>()
     const [chargeCommentsCount, setchargeCommentsCount] = useState()
-    const [postLikeCounts, setpostLikeCounts] = useState<[]>([])
-    const [postCommentCounts, setpostCommentCounts] = useState<[]>([])
+    const [postLikeCounts, setpostLikeCounts] = useState<Record<string, number>>({})
+    const [postCommentCounts, setpostCommentCounts] = useState<Record<string, number>>({})
 
+    interface postdata {
+        _id :string,
+        username: string,
+        userId:string,
+        content:{message:string, title: string}
+    }
+    interface PostLike {
+        _id: string,
+        count: number
+      }
+    interface likeData {
+        postId: string
+      }
 
+      
+
+    interface commentData{
+        userName: string;
+        commentContent: string 
+      }
+    
+      
 
 useEffect(()=>{
     
@@ -57,7 +78,7 @@ useEffect(()=>{
 useEffect(() => {
  (async () => {
    const res =  await axios.get("/api/users/post/getpostlikecount");
-   const likeCounts = res.data.getPostLikes.reduce((acc, { _id, count }) => {
+   const likeCounts = res.data.getPostLikes.reduce((acc  :Record<string, number>, { _id, count }:PostLike) => {
     acc[_id] = count;
     return acc;
   }, {});
@@ -69,7 +90,7 @@ useEffect(() => {
 useEffect(() => {
     (async () => {
       const res =  await axios.get("/api/users/post/getpostcommentcount");
-      const commentCounts = res.data.getPostCommentRes.reduce((acc, { _id, count }) => {
+      const commentCounts = res.data.getPostCommentRes.reduce((acc:Record<string, number>, { _id, count }:PostLike) => {
        acc[_id] = count;
        return acc;
      }, {});
@@ -78,7 +99,7 @@ useEffect(() => {
      })()
    }, [])
 
-async function getAllLIkes(userid) {
+async function getAllLIkes(userid:string | undefined) {
     try {   
         const res = await axios.post("/api/users/likes/getlikedata",{userId : userid});  setLikedData(res.data.res)
         
@@ -88,7 +109,7 @@ async function getAllLIkes(userid) {
     
 }
 
-async function likeHandler(id){
+async function likeHandler(id:string){
     if(likedData.some((data)=> data.postId === id )){
        const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.userId, postId:id })
         setChargeGetLikeData(Math.random())
@@ -106,7 +127,7 @@ async function likeHandler(id){
 
 
 
- function redirectToPost(id, type ){
+ function redirectToPost(id: string, type: string ){
 
     if(type === "title"){
         if(contextData.commentVisibleId ){
@@ -124,13 +145,14 @@ async function likeHandler(id){
 
 
  
-function shareHandler(id) {
+function shareHandler(id: string) {
     toast.success("Copied")
     navigator.clipboard.writeText(`${location.href}/${id}`)
 }
 
     const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
+
 
   return (
     <div className='h-[100vh] overflow-hidden'><nav className="bg-white shadow-md " >

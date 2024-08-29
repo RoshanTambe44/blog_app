@@ -16,14 +16,17 @@ export default function Post() {
   const [commentData, setCommentData] = useState<commentData[]>([]);
   const [SinglePostData, setSinglePostData] = useState<singlePostData[]>([]);
   const [randomNumber, setrandomNumber] = useState<number>();
-  const [postLikeCounts, setpostLikeCounts] = useState<postLikeCount[]>([]);
-  const [postCommentCounts, setpostCommentCounts] = useState([]);
+  const [postLikeCounts, setpostLikeCounts] = useState<Record<string, number>>({});
+  const [postCommentCounts, setpostCommentCounts] = useState<Record<string, number>>({});
   const [chargeLikeCount, setchargeLikeCount] = useState<number>(0);
   const [chargeCommentsCount, setchargeCommentsCount] = useState<number>(0);
   const [token, settoken] = useState(true);
   const router = useRouter();
   const param = useParams();
-  const postId: string = param.postId || '';
+  const postId: string | string[] = param.postId || '';
+  console.log(typeof postId);
+  
+
 
   interface commentData{
     userName: string;
@@ -41,9 +44,12 @@ export default function Post() {
     content: {title:string,  message: string};
   }
 
-  interface postLikeCount{
-    postId : string
+
+  interface PostLike {
+    _id: string;
+    count: number;
   }
+  
  console.log("mainDashboard/[postId]")
 
   useEffect(() => {
@@ -67,15 +73,11 @@ export default function Post() {
   },[contextData]);
 
 
-  interface PostLike {
-    _id: string;
-    count: number;
-  }
-  
+ 
   useEffect(() => {
     (async () => {
       const res = await axios.get("/api/users/post/getpostlikecount");
-      const likeCounts = res.data.getPostLikes.reduce((acc: any, { _id, count }:PostLike) => {
+      const likeCounts = res.data.getPostLikes.reduce((acc: Record<string, number>, { _id, count }:PostLike) => {
         acc[_id] = count;
         return acc;
       }, {});
@@ -87,7 +89,7 @@ export default function Post() {
     (async () => {
       const res = await axios.get("/api/users/post/getpostcommentcount");
       const commentCounts = res.data.getPostCommentRes.reduce(
-        (acc: any, { _id, count }:PostLike) => {
+        (acc: Record<string, number>, { _id, count }:PostLike) => {
           acc[_id] = count;
           return acc;
         },
@@ -200,6 +202,10 @@ export default function Post() {
 
   const userName = contextData?.userName || "";
   const firstLatter = userName.charAt(0).toUpperCase();
+  const resolvedPostId: string = Array.isArray(postId) ? postId[0] : postId;
+
+  console.log(postLikeCounts);
+  
 
   return (
     <div className="h-[100vh] overflow-hidden">
@@ -283,7 +289,7 @@ export default function Post() {
                           }
                         ></i>{" "}
                         <div className="text-xs font-light">
-                          {postLikeCounts[postId] || 0}
+                          {postLikeCounts[resolvedPostId] || 0}
                         </div>
                       </div>
 
@@ -295,7 +301,7 @@ export default function Post() {
                           className="fa-regular fa-comment"
                         ></i>
                         <div className="text-xs font-light">
-                          {postCommentCounts[postId] || 0}
+                          {postCommentCounts[resolvedPostId] || 0}
                         </div>
                       </div>
 

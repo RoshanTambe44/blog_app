@@ -58,7 +58,7 @@ useEffect(() => {
         if(emailCheck.data.message == "wrong email"){
           if(password){
             if(password == conformPass ) {
-              const otp = Math. floor(Math. random() * (9999 - 1000 + 1)) + 1000 
+              const otp:any = Math. floor(Math. random() * (9999 - 1000 + 1)) + 1000 
               
               contextData.setUserVerificationOtp(otp)
               contextData.setUserEmail(email)
@@ -118,21 +118,21 @@ function conformPasswordEye() {
     <form action="/register" method="POST">
         <div className="mb-4">
             <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Username</label>
-            <input type="text" id="username" onChange={(e)=> setUsername(e.target.value)} name="username" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required/>
+            <input type="text" id="username" onChange={(e:any)=> setUsername(e.target.value)} name="username" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required/>
             {username ? <> {userNameState.data.state === true ? <p className='text-sm ps-1 text-green-500' >Nice username</p>: <p className='text-sm ps-1 text-red-500' >Username must be uniqe</p>}</> : <></> }
         </div>
         <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Email</label>
-            <input type="email" id="email" onChange={(e)=> setEmail(e.target.value)} name="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+            <input type="email" id="email" onChange={(e:any)=> setEmail(e.target.value)} name="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
           {emailCheck.data.message == "wrong password"  ? <p className='text-sm ps-1 text-red-500' >Email already in use.</p>: <></>}
         </div>
         <div className="mb-4">
             <label htmlFor="password"  className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Password <span className='cursor-pointer ms-2' onClick={passwordEye} ><i className={passwordEye1 ? "fa-regular fa-eye-slash" : "fa-regular fa-eye"}></i></span></label>
-            <input type={passwordEye1 ? "password": "text"} id="password" onChange={(e)=> setPassword(e.target.value)} name="password" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+            <input type={passwordEye1 ? "password": "text"} id="password" onChange={(e:any)=> setPassword(e.target.value)} name="password" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="mb-6">
             <label htmlFor="password_confirmation" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Confirm Password <span className="cursor-pointer ms-2" onClick={conformPasswordEye}><i className={passwordEye2 ? "fa-regular fa-eye-slash" : "fa-regular fa-eye"}></i></span> </label>
-            <input type={passwordEye2 ? "password": "text"} id="password_confirmation" onChange={(e)=> setConformPass(e.target.value)} name="password_confirmation"  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+            <input type={passwordEye2 ? "password": "text"} id="password_confirmation" onChange={(e:any)=> setConformPass(e.target.value)} name="password_confirmation"  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="flex items-center gap-2 ">
             {check === "done" ? <Link href='/emailVerification'  onClick={()=>handler()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</Link> : <div  onClick={()=>handler()} className="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</div>  }

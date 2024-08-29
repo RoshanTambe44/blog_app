@@ -10,12 +10,18 @@ import React, { useEffect, useState } from "react";
 export default function Followings() {
   const router = useRouter()
   const contextData = useStore()
-  const [followings, setFollowings] = useState([])
-const [follows, setFollows] = useState([])
+  const [followings, setFollowings] = useState<FollowingData[]>([])
+const [follows, setFollows] = useState<Follows[]>([])
 
 
 console.log("followings");
 
+interface FollowingData {
+  followingId:string
+}
+interface Follows {
+  followingId:string
+}
 
 
   const userName = contextData?.userName || "";
@@ -34,7 +40,7 @@ console.log("followings");
       })()
   },[])    
 
-  async function getFollowings (userId){
+  async function getFollowings (userId: string | undefined){
   
     const res = await axios.post("/api/users/follow/getfollowercount", {followerId:userId})
     setFollowings(res.data.followerCountRes)
@@ -42,14 +48,14 @@ console.log("followings");
   }
 
 
-  async function followHandler( followingUserName ) {
+  async function followHandler( followingUserName:string ) {
     const res = await axios.post("/api/users/follow",{followerId:contextData.userName, followingId:followingUserName})  
     getFollowData(contextData.userName);
     
  }
 
 
-async function unfollowHandler (unfollowingusername){
+async function unfollowHandler (unfollowingusername:string){
     const res = await axios.post("/api/users/unfollow",{followerId:contextData.userName, followingId:unfollowingusername}) 
     getFollowData(contextData.userName);
      
@@ -58,7 +64,7 @@ async function unfollowHandler (unfollowingusername){
 }
 
 
-async function getFollowData (username){
+async function getFollowData (username: string | undefined){
   console.log(username);
   (userName)
   const res = await axios.post("/api/users/follow/getfollowdata", {followerId:username })

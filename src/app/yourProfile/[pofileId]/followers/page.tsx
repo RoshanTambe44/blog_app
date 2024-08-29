@@ -12,8 +12,15 @@ import React, { useEffect, useState } from "react";
 export default function Followers() {
   const router = useRouter()
   const contextData = useStore()
-  const [followers, setFollowers] = useState([]) 
-  const [follows, setFollows] = useState([])
+  const [followers, setFollowers] = useState<FollowerData[]>([]) 
+  const [follows, setFollows] = useState<Follows[]>([])
+
+  interface FollowerData {
+    followerId:string
+  }
+  interface Follows {
+    followingId:string
+  }
 
 console.log("followers")
 
@@ -34,7 +41,7 @@ console.log("followers")
   },[])    
 
 
-  async function getFollowers (userId){
+  async function getFollowers (userId:string | undefined){
     
       const res = await axios.post("/api/users/follow/getfollowingcount", {followingId:userId})
       console.log(res.data.followingCountRes)
@@ -43,14 +50,14 @@ console.log("followers")
     }
 
 
-    async function followHandler( followingUserName ) {
+    async function followHandler( followingUserName: string ) {
       const res = await axios.post("/api/users/follow",{followerId:contextData.userName, followingId:followingUserName})  
       getFollowData(contextData.userName);
       
    }
   
   
-  async function unfollowHandler (unfollowingusername){
+  async function unfollowHandler (unfollowingusername: string){
       const res = await axios.post("/api/users/unfollow",{followerId:contextData.userName, followingId:unfollowingusername}) 
       getFollowData(contextData.userName);
        
@@ -59,7 +66,7 @@ console.log("followers")
   }
   
   
-  async function getFollowData (username){
+  async function getFollowData (username:string | undefined){
     const res = await axios.post("/api/users/follow/getfollowdata", {followerId:username })
     setFollows(res.data.followDataRes)
   

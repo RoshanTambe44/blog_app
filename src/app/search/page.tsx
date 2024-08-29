@@ -11,9 +11,16 @@ export default function Search() {
     console.log("search")
     const contextData = useStore(); 
 const [allProfileData, setallProfileData] = useState([])
-const [follows, setFollows] = useState([])
+const [follows, setFollows] = useState<followData[]>([])
 const [inp, setInp] = useState('')
-const [filteredData, setfilteredData] = useState([])
+const [filteredData, setfilteredData] = useState<filterData[]>([])
+interface filterData{
+    _id:string,
+    count:number
+}
+interface followData{
+    followingId:string
+}
 
     useEffect(()=>{
         
@@ -112,7 +119,7 @@ const [filteredData, setfilteredData] = useState([])
                 <div className="flex w-full h-full flex-col gap-2 overflow-scroll no-scrollbar cursor-pointer">
                 {inp ? <> {filteredData.map((data, index)=> <div key={index} className="bg-gray-400 w-full p-2 rounded-lg flex justify-between" >      
                     <div className="flex gap-4">
-                    <div className="rounded-full bg-black w-20 h-20 p"><Image src="" alt=""  /></div>
+                    <div className="rounded-full bg-black w-20 h-20 p"></div>
                      <div className="w-52 flex flex-col p-2  ">
                         <h1 className="text-xl ">{data._id}</h1> 
                         <div className="w-full flex justify-between">

@@ -13,14 +13,14 @@ export default function Profile() {
   const router = useRouter()
   const contextData = useStore()
   const userID =  useParams().profileId
-  const [posts, setposts] = useState([])
+  const [posts, setposts] = useState<postdata[]>([])
   const [username, setusername] = useState()
-  const [likedData, setLikedData] = useState([])
-  const [chargeLikeCount, setchargeLikeCount] = useState()
-  const [chargeGetLikeData, setChargeGetLikeData] = useState()
-  const [postLikeCounts, setpostLikeCounts] = useState([])
-  const [postCommentCounts, setpostCommentCounts] = useState([])
-  const [chargeCommentsCount, setchargeCommentsCount] = useState()
+  const [likedData, setLikedData] = useState<likeData[]>([])
+  const [chargeLikeCount, setchargeLikeCount] = useState<number>(0)
+  const [chargeGetLikeData, setChargeGetLikeData] = useState<number>(0)
+  const [postLikeCounts, setpostLikeCounts] = useState<Record<string, number>>({})
+  const [postCommentCounts, setpostCommentCounts] = useState<Record<string, number>>({})
+  const [chargeCommentsCount, setchargeCommentsCount] = useState<number>(0)
   console.log("profile/profileId")
 
 
@@ -43,7 +43,23 @@ export default function Profile() {
   
           
       })()
-  },[contextData])   
+  },[contextData])  
+  
+  
+  interface postdata {
+    _id :string,
+    username: string,
+    userId:string,
+    content:{message:string, title: string}
+}
+interface PostLike {
+    _id: string,
+    count: number
+  }
+interface likeData {
+    postId: string
+  }
+
   
   useEffect(()=>{
     (async()=>{
@@ -78,7 +94,7 @@ export default function Profile() {
     useEffect(() => {
         (async () => {
           const res =  await axios.get("/api/users/post/getpostlikecount");
-          const likeCounts = res.data.getPostLikes.reduce((acc, { _id, count }) => {
+          const likeCounts = res.data.getPostLikes.reduce((acc:Record<string, number>, { _id, count }:PostLike) => {
            acc[_id] = count;
            return acc;
          }, {});
@@ -91,7 +107,7 @@ export default function Profile() {
        useEffect(() => {
         (async () => {
           const res =  await axios.get("/api/users/post/getpostcommentcount");
-          const commentCounts = res.data.getPostCommentRes.reduce((acc, { _id, count }) => {
+          const commentCounts = res.data.getPostCommentRes.reduce((acc:Record<string, number>, { _id, count }:PostLike) => {
            acc[_id] = count;
            return acc;
          }, {});
@@ -100,7 +116,7 @@ export default function Profile() {
          })()
        }, [chargeCommentsCount])
 
-    async function likeHandler(id){
+    async function likeHandler(id:string){
         if(likedData.some((data)=> data.postId === id )){
            const deleteRes = await axios.post("/api/users/likes/removelike",{userId : userID, postId:id })
             setchargeLikeCount(Math.random());
@@ -114,7 +130,7 @@ export default function Profile() {
         }
       }
 
-     function redirectToPost(id, type){
+     function redirectToPost(id:string, type:string){
       if(type === "title"){
         if(contextData.commentVisibleId ){
             contextData.setCommentVisibleId(false)
@@ -129,7 +145,7 @@ export default function Profile() {
 
      }
 
-     function shareHandler(id) {
+     function shareHandler(id:string) {
         toast.success("Copied")
         navigator.clipboard.writeText(`${location.origin}/mainDashboard/${id}`)
       }
