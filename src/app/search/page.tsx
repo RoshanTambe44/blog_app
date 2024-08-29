@@ -10,7 +10,7 @@ export default function Search() {
 
     console.log("search")
     const contextData = useStore(); 
-const [allProfileData, setallProfileData] = useState([])
+const [allProfileData, setallProfileData] = useState<AllProfileData[]>([])
 const [follows, setFollows] = useState<followData[]>([])
 const [inp, setInp] = useState('')
 const [filteredData, setfilteredData] = useState<filterData[]>([])
@@ -20,6 +20,11 @@ interface filterData{
 }
 interface followData{
     followingId:string
+}
+
+interface AllProfileData {
+    _id: string,
+    count:number
 }
 
     useEffect(()=>{
@@ -47,26 +52,26 @@ interface followData{
 
 
 
-    async function getFollowData (username){
+    async function getFollowData (username:string|undefined){
             const res = await axios.post("api/users/follow/getfollowdata", {followerId:username })
             setFollows(res.data.followDataRes)
 
          }
  
-    function filterProfileHandler (inp) {
+    function filterProfileHandler (inp:any) {
         setInp(inp)
        setfilteredData(allProfileData.filter((data)=> data._id.includes(inp)  ))
     }
 
 
-    async function followHandler( followingUserName ) {
+    async function followHandler( followingUserName:string ) {
         const res = await axios.post("api/users/follow",{followerId:contextData.userName, followingId:followingUserName})  
         getFollowData(contextData.userName);
         
      }
 
 
-    async function unfollowHandler (unfollowingusername){
+    async function unfollowHandler (unfollowingusername:string){
         const res = await axios.post("api/users/unfollow",{followerId:contextData.userName, followingId:unfollowingusername}) 
         getFollowData(contextData.userName);
          
