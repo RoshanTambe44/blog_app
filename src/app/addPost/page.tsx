@@ -18,6 +18,7 @@ export default function AddPost() {
     const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
 
+console.log(message);
 
     useEffect(()=>{
         (async()=>{
@@ -107,7 +108,7 @@ export default function AddPost() {
 
             <div className="mb-4">
                 <label htmlFor="content" className="block text-gray-700 text-sm font-bold mb-2">Content</label>
-                <JoditEditor value={message} onChange={(e)=>setMessage(e)} className="shadow appearance-none border rounded w-full  text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></JoditEditor>
+                <textarea id="content" name="content" value={message} onChange={(e)=>setMessage(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required ></textarea>
                
             </div>
             <div className="mb-4">
