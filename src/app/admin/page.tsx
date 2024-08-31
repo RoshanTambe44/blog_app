@@ -77,7 +77,7 @@ console.log(allPost)
             <table className="w-full bg-white border border-gray-300 rounded-lg shadow-md h-full  ">
               
               <tbody className=' '>
-              {allPost.map((post)=><tr>
+              {allPost.map((post, index)=><tr key={index}>
                   <td className="border-b px-4 py-2">{post.content.title}</td>
                   <td className="border-b px-4 py-2">{post.username}</td>
                   <td className="border-b px-4 py-2">{post.createdAt}</td>
@@ -106,7 +106,7 @@ console.log(allPost)
                 </tr>
               </thead>
               <tbody>
-                {allProfile.map((profile)=><tr>
+                {allProfile.map((profile, index)=><tr key={index}>
                   <td className="border-b px-4 py-2">{profile.username}</td>
                   <td className="border-b px-4 py-2">{profile.email}</td>
                   <td className="border-b px-4 py-2">{profile.createdAt || "old account"}</td>
