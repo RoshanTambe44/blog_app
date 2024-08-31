@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
     },
     verifiedTocken: String,
     verifiedTockenExpiry: Date
-})
+},{timestamps:true})
 
 
  const user = mongoose.models.users || mongoose.model("users", userSchema);
