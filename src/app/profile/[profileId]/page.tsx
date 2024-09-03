@@ -183,19 +183,19 @@ interface likeData {
               <div className="h-full ">
                 <div className="h-[10%] flex justify-between items-center font-bold mb-4 text-gray-900 "><h1 className="text-2xl ">{username}</h1> </div>
                 <div className="h-[25%] flex items-center justify-between   ">
-                  <div className="ms-8 h-28 rounded-full bg-gray-500 w-28 "></div>
-                  <div className="me-40 flex justify-center items-center gap-10">
+                  <div className="md:ms-8 md:h-28 rounded-full bg-gray-500 w-24 h-24 md:w-28 "></div>
+                  <div className="md:me-40 flex justify-center items-center md:gap-10 gap-5">
                     
                   <div className="w-30 flex flex-col-reverse" >
-                    <h1 className="font-bold text-xl text-center text-black ">post</h1>
+                    <h1 className="font-bold md:text-xl text-sm text-center text-black ">post</h1>
                     <h1 className="text-gray-600 text-center">{posts.length}</h1>
                   </div> 
                   <div className="w-30 flex flex-col-reverse" >
-                    <h1 onClick={()=>router.push(`${location.pathname}/followers`)} className="font-bold text-xl text-center text-black cursor-pointer ">Followers</h1>
+                    <h1 onClick={()=>router.push(`${location.pathname}/followers`)} className="font-bold md:text-xl text-sm text-center text-black cursor-pointer ">Followers</h1>
                     <h1 className="text-gray-600 text-center">500</h1>
                   </div> 
                   <div className="w-30 flex flex-col-reverse" >
-                    <h1 onClick={()=>router.push(`${location.pathname}/followings`)} className="font-bold text-xl text-center text-black cursor-pointer ">Followings</h1>
+                    <h1 onClick={()=>router.push(`${location.pathname}/followings`)} className="font-bold md:text-xl text-sm text-center text-black cursor-pointer ">Followings</h1>
                     <h1 className="text-gray-600 text-center">1</h1>
                   </div> 
                 </div>
