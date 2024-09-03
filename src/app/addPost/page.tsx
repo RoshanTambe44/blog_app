@@ -1,7 +1,6 @@
 'use client'
 import { useStore } from '@/context/store'
 import axios from 'axios'
-import JoditEditor from 'jodit-react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
@@ -43,10 +42,12 @@ console.log(message);
            if(title.length > 5 ){
             if(message){
                 if(contextData.userId){
-                    const res = await axios.post('/api/users/post/addpost', {userId:contextData.userId, username:contextData.userName,  content: {title, message }})
+                    const res = await axios.post('/api/users/post/addpost', {userId:contextData.userId, username:contextData.userName,  content: {title, message }, category:category})
+                    console.log(res)
                     toast.success("Post Uploded")
                 setTitle("")
                 setMessage("")
+                setCategory("")
                 }
                 
                 else{}

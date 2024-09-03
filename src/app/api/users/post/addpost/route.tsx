@@ -9,9 +9,9 @@ export async function POST(req: Request){
  
     await Connect()
     const reqBody =  await req.json();
-    const {username, userId, content } = reqBody
+    const {username, userId, content ,category} = reqBody
     
-    const postData = await posts.create({userId, username, content })
+    const postData = await posts.create({userId, username, content, category })
     return Response.json({messages: "successfully posted", postData })
         
     } catch (error) {

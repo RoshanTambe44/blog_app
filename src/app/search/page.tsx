@@ -60,7 +60,7 @@ interface AllProfileData {
  
     function filterProfileHandler (inp:any) {
         setInp(inp)
-       setfilteredData(allProfileData.filter((data)=> data._id.includes(inp)  ))
+       setfilteredData(allProfileData.filter((data)=> data._id.includes(inp.toLowerCase())))
     }
 
 
