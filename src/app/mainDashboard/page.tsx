@@ -57,6 +57,7 @@ useEffect(()=>{
         contextData.setUserId(userDataRes.data.tokenUserData._id)
         contextData.setUserEmail(userDataRes.data.tokenUserData.email)
         getAllLIkes(userDataRes.data.tokenUserData._id)
+        
     })()
 },[contextData])
 

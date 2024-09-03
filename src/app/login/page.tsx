@@ -27,9 +27,16 @@ export default function Login() {
        const res = await axios.post("/api/users/login", {email, password } )
        
        if(res.data.success){
-        contextData.setUserId(res.data.userData._id)
-        contextData.setUsername(res.data.userData.username)
-          route.push('/mainDashboard')
+            if (res.data.userData.admin){
+              console.log("/admin")
+              route.push('/admin')
+            }
+            else{ 
+              contextData.setUserId(res.data.userData._id)
+              contextData.setUsername(res.data.userData.username)
+              route.push('/mainDashboard')
+            }
+        
        }
        else{
         setEmailPass(res.data.message)

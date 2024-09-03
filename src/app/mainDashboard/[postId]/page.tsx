@@ -123,7 +123,7 @@ export default function Post() {
         console.log(error);
       }
     })();
-  }, [contextData.userId]);
+  }, [chargeGetLikeData]);
 
   async function likeHandler(id:any) {
     if (token) {
@@ -198,7 +198,7 @@ export default function Post() {
       });
       setCommentData(res.data.getCommentRes.reverse());
     })();
-  }, [postId]);
+  }, [chargeCommentsCount]);
 
   const userName = contextData?.userName || "";
   const firstLatter = userName.charAt(0).toUpperCase();

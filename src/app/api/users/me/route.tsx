@@ -10,6 +10,8 @@ export async function GET (req:NextRequest) {
         
        const userId = await getUserData(req);
        
+
+       
        const tokenUserData = await user.findOne({_id: userId}).select("-password");
         
         return NextResponse.json({success:true, message:"successfully get data from token", tokenUserData })
