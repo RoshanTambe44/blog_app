@@ -166,18 +166,25 @@ export default function Post() {
   async function comentSend(e: any) {
     e.preventDefault();
 
-    try {
-      const commentRes = await axios.post("/api/users/comments", {
-        userId: contextData.userId,
-        userName: contextData.userName,
-        postId: postId,
-        commentContent: comment,
-      });
-      setrandomNumber(Math.random());
-      setchargeCommentsCount(Math.random());
-      setComment("");
-    } catch (error) {
-      console.log(error);
+    if(comment){
+      try {
+        const commentRes = await axios.post("/api/users/comments", {
+          userId: contextData.userId,
+          userName: contextData.userName,
+          postId: postId,
+          commentContent: comment,
+        });
+        setrandomNumber(Math.random());
+        setchargeCommentsCount(Math.random());
+        setComment("");
+      toast.success("Commented")
+
+      } catch (error) {
+        console.log(error);
+      }
+
+    }else{
+      toast.error("Enter Comment")
     }
   }
 
@@ -316,29 +323,32 @@ export default function Post() {
                     <div className="h-[60%]">
                       <div className=" h-[70%] px-2 overflow-scroll no-scrollbar">
                         {commentData.map((data, index) => (
-                          <div key={index} className="flex mt-2 flex-col p-2 rounded-lg bg-slate-300">
-                            <div className="flex gap-2 items-center">
+                          <div key={index} className="flex mt-2 flex-col p-2 rounded-lg bg-slate-300 shadow-sm">
+                            <div className="flex gap-2 items-center ">
                               <div className="h-4 w-4 bg-black rounded-full  "></div>
-                              <div className="text-sm">{data.userName}</div>
+                              <div className="text-sm text-black">{data.userName}</div>
                             </div>
-
+                            <div className="flex justify-between items-center">
                             <h1 className=" ms-6 text-sm text-gray-500">
                               {data.commentContent}
                             </h1>
+                            <div className=""><i className= " text-xs text-gray-600 fa-solid fa-trash"></i></div>
+                            </div>
+                            
                           </div>
                         ))}
                       </div>
-                      <div className="flex mt-4 gap-2 w-full h-[20%] ">
+                      <div className="flex mt-4 gap-2 w-full h-[20%] pt-6 md:pt-0 ">
                         <input
                           type="text"
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
                           placeholder="comment"
-                          className="bg-transparent border-b border-gray-700 focus:outline-none  p-2 w-[90%] text-black placeholder:text-black"
+                          className="bg-transparent border-b border-gray-700 focus:outline-none  p-2 w-[80%] text-black placeholder:text-black"
                         />
                         <button
                           onClick={(e) => comentSend(e)}
-                          className="bg-blue-500 w-[10%] text-white border border-blue-950 rounded-lg p-2 hover:bg-blue-300 hover:text-black"
+                          className="bg-blue-500 w-[20%] text-white border border-blue-950 rounded-lg p-2 hover:bg-blue-300 hover:text-black"
                         >
                           Send
                         </button>
