@@ -3,7 +3,7 @@ import { useStore } from "@/context/store";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 
@@ -12,8 +12,13 @@ import React, { useEffect, useState } from "react";
 export default function Followers() {
   const router = useRouter()
   const contextData = useStore()
+  const userID = useParams().profileId;
   const [followers, setFollowers] = useState<FollowerData[]>([]) 
   const [follows, setFollows] = useState<Follows[]>([])
+
+
+   console.log(userID);
+   
 
   interface FollowerData {
     followerId:string
@@ -34,17 +39,23 @@ console.log("followers")
           contextData.setUsername(userDataRes.data.tokenUserData.username)
           contextData.setUserId(userDataRes.data.tokenUserData._id)
           contextData.setUserEmail(userDataRes.data.tokenUserData.email)
-          getFollowers(userDataRes.data.tokenUserData.username)
           getFollowData(userDataRes.data.tokenUserData.username)
           
       })()
   },[])    
-
+  
+  useEffect(() => {
+    (async () => {
+      const res = await axios.post("/api/users/userinfo", { userId: userID });
+      getFollowers(res.data.userInfo.username);
+      
+      
+    })();
+  }, [userID]);
 
   async function getFollowers (userId:string | undefined){
     
       const res = await axios.post("/api/users/follow/getfollowingcount", {followingId:userId})
-      console.log(res.data.followingCountRes)
       setFollowers(res.data.followingCountRes)
   
     }
@@ -106,23 +117,23 @@ console.log("followers")
                 <div className="w-full"><h1 className="text-2xl text-black ">Followers</h1></div>
                 <hr/>
                 <div className="flex flex-col gap-2 overflow-scroll no-scrollbar">
-                {followers.map((data, index)=><div key={index} className="bg-gray-400 w-full p-2 rounded-lg flex 
+                {followers.map((data, index)=><div key={index} className="bg-gray-600 w-full p-2 rounded-lg flex 
                 justify-between">      
                     
                     <div className="flex gap-4">
-                    <div className="rounded-full bg-black md:w-20 md:h-20 w-10 h-10 p"><Image src="" alt=""  /></div>
+                    <div className="rounded-full bg-black md:w-20 md:h-20 w-10 h-10  p"><Image src="" alt=""  /></div>
                     <div className="md:w-40 flex items-center p-2  ">
                         <h1 className=" text-sm md:text-xl ">{data.followerId}</h1>
                     </div>  
                     </div>
-                    <div className="flex md:gap-8 gap-2 items-center cursor-pointer ">
-                        <div className="md:py-2 md:px-4 py-1 px-2 text-sm bg-blue-500 font-semibold rounded-lg">Share</div>
-                        {follows.some((follow)=>follow.followingId === data.followerId ) ? <div onClick={()=>unfollowHandler(data.followerId)} className="md:py-2 text-sm md:px-4 px-2 py-1  bg-gray-200 rounded-lg font-semibold text-gray-500">Unfollow</div>  : <div onClick={()=>followHandler(data.followerId)} className="md:py-2 md:px-4 py-1 px-2 text-sm bg-blue-500 rounded-lg font-semibold">FollowBack</div>}
+                    <div className="flex md:gap-8 gap-4 items-center cursor-pointer ">
+                        <div className="md:py-2 md:px-4 px-2 py-1 bg-blue-500 rounded-lg font-semibold">share</div>
+                        {data.followerId === contextData.userName ? <></>:<>{follows.some((follow)=>follow.followingId === data.followerId ) ? <div onClick={()=>unfollowHandler(data.followerId)} className="md:py-2 md:px-4 py-1 px-2 bg-gray-200 rounded-lg font-semibold text-gray-500 ">Unfollow</div>  : <div onClick={()=>followHandler(data.followerId)} className="md:py-2 md:px-4  py-1 px-2 bg-blue-500 rounded-lg font-semibold">FollowBack</div>}</>}
                     </div>
 
                     </div>)}
                     
-                </div>  
+                </div>
                 
 
             </section>

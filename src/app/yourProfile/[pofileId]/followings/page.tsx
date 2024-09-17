@@ -72,6 +72,7 @@ async function getFollowData (username: string | undefined){
 
 }
 
+
   return (
     <div className="h-[100vh] overflow-hidden" >
       <nav className="bg-white shadow-md" >
@@ -109,14 +110,14 @@ async function getFollowData (username: string | undefined){
                 justify-between">      
                     
                     <div className="flex gap-4">
-                    <div className="rounded-full bg-black w-20 h-20 p"></div>
-                     <div className="w-40 flex items-center p-2  ">
-                        <h1 className="text-xl ">{data.followingId}</h1>
+                    <div className="rounded-full bg-black md:w-20 md:h-20 w-10 h-10 p"></div>
+                     <div className="md:w-40 flex items-center p-2  ">
+                        <h1 className="md:text-xl text-sm ">{data.followingId}</h1>
                     </div>  
                     </div>
-                    <div className="flex gap-8 items-center cursor-pointer ">
-                        <div className="py-2 px-4 bg-blue-500 rounded-lg">share</div>
-                        {follows.some((follow)=>follow.followingId === data.followingId ) ? <div onClick={()=>unfollowHandler(data.followingId)} className="py-2 px-4 bg-gray-200 rounded-lg font-light ">Unfollow</div>  : <div onClick={()=>followHandler(data.followingId)} className="py-2 px-4 bg-blue-500 rounded-lg">Follow</div>}
+                    <div className="flex md:gap-8 gap-4 items-center cursor-pointer ">
+                        <div className="md:py-2 md:px-4 py-1 px-2 text-sm bg-blue-500 font-semibold rounded-lg">Share</div>
+                        {follows.some((follow)=>follow.followingId === data.followingId ) ? <div onClick={()=>unfollowHandler(data.followingId)} className="md:py-2 md:px-4 py-1 px-2 text-sm bg-gray-200 rounded-lg font-semibold  text-gray-500">Unfollow</div>  : <div onClick={()=>followHandler(data.followingId)} className="md:py-2 md:px-4 py-1 px-2 text-sm bg-blue-500 rounded-lg font-semibold">Follow</div>}
                     </div>
 
                     </div>)}

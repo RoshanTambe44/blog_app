@@ -1,28 +1,29 @@
 "use client";
 import { useStore } from "@/context/store";
 import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 
 
-
-export default function Followers() {
+export default function Followings() {
   const router = useRouter()
   const contextData = useStore()
-  const [followers, setFollowers] = useState<FollowerData[]>([]) 
-  const [follows, setFollows] = useState<Follows[]>([])
+  const userID = useParams().profileId;
+  const [followings, setFollowings] = useState<FollowingData[]>([])
+const [follows, setFollows] = useState<Follows[]>([])
 
-  interface FollowerData {
-    followerId:string
-  }
-  interface Follows {
-    followingId:string
-  }
 
-console.log("followers")
+console.log("followings");
+
+interface FollowingData {
+  followingId:string
+}
+interface Follows {
+  followingId:string
+}
+
 
   const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
@@ -34,44 +35,52 @@ console.log("followers")
           contextData.setUsername(userDataRes.data.tokenUserData.username)
           contextData.setUserId(userDataRes.data.tokenUserData._id)
           contextData.setUserEmail(userDataRes.data.tokenUserData.email)
-          getFollowers(userDataRes.data.tokenUserData.username)
-          getFollowData(userDataRes.data.tokenUserData.username)
+          getFollowData(userDataRes.data.tokenUserData.username);
+          
           
       })()
-  },[])    
-
-
-  async function getFollowers (userId:string | undefined){
-    
-      const res = await axios.post("/api/users/follow/getfollowingcount", {followingId:userId})
-      console.log(res.data.followingCountRes)
-      setFollowers(res.data.followingCountRes)
+  },[])  
   
-    }
-
-
-    async function followHandler( followingUserName: string ) {
-      const res = await axios.post("/api/users/follow",{followerId:contextData.userName, followingId:followingUserName})  
-      getFollowData(contextData.userName);
+  
+  useEffect(() => {
+    (async () => {
+      const res = await axios.post("/api/users/userinfo", { userId: userID });
+      getFollowings(res.data.userInfo.username)
       
-   }
+      
+    })();
+  }, [userID]);
+
+  async function getFollowings (userId: string | undefined){
   
-  
-  async function unfollowHandler (unfollowingusername: string){
-      const res = await axios.post("/api/users/unfollow",{followerId:contextData.userName, followingId:unfollowingusername}) 
-      getFollowData(contextData.userName);
-       
-  
-  
-  }
-  
-  
-  async function getFollowData (username:string | undefined){
-    const res = await axios.post("/api/users/follow/getfollowdata", {followerId:username })
-    setFollows(res.data.followDataRes)
-  
+    const res = await axios.post("/api/users/follow/getfollowercount", {followerId:userId})
+    setFollowings(res.data.followerCountRes)
+
   }
 
+
+  async function followHandler( followingUserName:string ) {
+    const res = await axios.post("/api/users/follow",{followerId:contextData.userName, followingId:followingUserName})  
+    getFollowData(contextData.userName);
+    
+ }
+
+
+async function unfollowHandler (unfollowingusername:string){
+    const res = await axios.post("/api/users/unfollow",{followerId:contextData.userName, followingId:unfollowingusername}) 
+    getFollowData(contextData.userName);
+     
+
+
+}
+ console.log(followings, contextData.userName);
+ 
+
+async function getFollowData (username: string | undefined){
+  const res = await axios.post("/api/users/follow/getfollowdata", {followerId:username })
+  setFollows(res.data.followDataRes)
+
+}
 
   return (
     <div className="h-[100vh] overflow-hidden" >
@@ -87,7 +96,7 @@ console.log("followers")
 
       {/* <!-- Main Content --> */}
       <div className="container mx-auto px-4 py-6 flex-grow  ">
-        <div className="flex flex-col-reverse md:flex-row gap-6 ">
+        <div className="flex flex-col-reverse md:flex-row gap-6  ">
           {/* <!-- Sidebar --> */}
           <aside className="md:col-span-1 bg-white p-4 rounded-lg shadow-md md:w-[20%] ">
           <ul className="md:flex-col flex  items-center md:items-start justify-between  gap-2 md:gap-6">
@@ -103,26 +112,26 @@ console.log("followers")
           <main className="md:col-span-3 space-y-6  h-[79vh] md:w-[80%]">
             {/* <!-- Profile Section --> */}
             <section id="profile" className="bg-white p-6 rounded-lg shadow-md h-full flex flex-col gap-4  ">
-                <div className="w-full"><h1 className="text-2xl text-black ">Followers</h1></div>
+                <div className="w-full"><h1 className="text-2xl text-black ">Followings</h1></div>
                 <hr/>
                 <div className="flex flex-col gap-2 overflow-scroll no-scrollbar">
-                {followers.map((data, index)=><div key={index} className="bg-gray-400 w-full p-2 rounded-lg flex 
+                   {followings.map((data, index)=> <div key={index} className="bg-gray-600 w-full p-2 rounded-lg flex 
                 justify-between">      
                     
                     <div className="flex gap-4">
-                    <div className="rounded-full bg-black md:w-20 md:h-20 w-10 h-10 p"><Image src="" alt=""  /></div>
-                    <div className="md:w-40 flex items-center p-2  ">
-                        <h1 className=" text-sm md:text-xl ">{data.followerId}</h1>
+                    <div className="rounded-full bg-black md:w-20 md:h-20 w-10 h-10 p"></div>
+                     <div className="md:w-40 flex items-center p-2  ">
+                        <h1 className="text-sm md:text-xl ">{data.followingId}</h1>
                     </div>  
                     </div>
-                    <div className="flex md:gap-8 gap-2 items-center cursor-pointer ">
-                        <div className="md:py-2 md:px-4 py-1 px-2 text-sm bg-blue-500 font-semibold rounded-lg">Share</div>
-                        {follows.some((follow)=>follow.followingId === data.followerId ) ? <div onClick={()=>unfollowHandler(data.followerId)} className="md:py-2 text-sm md:px-4 px-2 py-1  bg-gray-200 rounded-lg font-semibold text-gray-500">Unfollow</div>  : <div onClick={()=>followHandler(data.followerId)} className="md:py-2 md:px-4 py-1 px-2 text-sm bg-blue-500 rounded-lg font-semibold">FollowBack</div>}
+                    <div className="flex md:gap-8 gap-4 items-center cursor-pointer ">
+                        <div className="md:py-2 md:px-4 py-1 px-2 bg-blue-500 rounded-lg font-semibold">share</div>
+                        {data.followingId === contextData.userName ? <></>:<>{follows.some((follow)=>follow.followingId === data.followingId ) ? <div onClick={()=>unfollowHandler(data.followingId)} className="md:py-2 md:px-4 py-1 px-2 bg-gray-200 rounded-lg text-gray-500 font-semibold">Unfollow</div>  : <div onClick={()=>followHandler(data.followingId)} className="md:py-2  md:px-4 px-2 py-1 bg-blue-500 rounded-lg font-semibold">Follow</div>}</>}
                     </div>
 
                     </div>)}
                     
-                </div>  
+                </div>
                 
 
             </section>

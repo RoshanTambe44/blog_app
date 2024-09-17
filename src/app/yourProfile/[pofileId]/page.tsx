@@ -288,7 +288,7 @@ export default function YourProfile() {
                     </div>
                     <div className="w-full ">
                       
-                      <button className="bg-blue-500 py-2 px-8 rounded-xl  hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300 ">
+                      <button className="bg-blue-500 py-2 px-4 md:px-8 rounded-xl  hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300 ">
                         Share
                       </button>
                     </div>
