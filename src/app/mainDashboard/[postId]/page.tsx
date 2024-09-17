@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import moment from 'moment'
+
 
 import React, { useEffect, useState } from "react";
 
@@ -30,7 +32,8 @@ export default function Post() {
 
   interface commentData{
     userName: string;
-    commentContent: string 
+    commentContent: string ,
+    createdAt:Date
   }
 
   interface LikeData {
@@ -42,6 +45,7 @@ export default function Post() {
     _id:string
     username: string;
     content: {title:string,  message: string};
+    createdAt:Date
   }
 
 
@@ -162,7 +166,7 @@ export default function Post() {
       router.push("/register");
     }
   }
-
+console.log(commentData)
   async function comentSend(e: any) {
     e.preventDefault();
 
@@ -268,16 +272,17 @@ export default function Post() {
             >
               {SinglePostData.map((post, index) => (
                 <div key={index} className="border-b cursor-pointer border-gray-200 p-4 shadow-lg rounded-lg h-full bg-gray-400">
-                  <div className="h-[10%]">
+                  <div className="h-[10%] flex justify-between">
                     <div className="flex items-center gap-2">
                       <div className="bg-black rounded-full h-5 w-5 text-white flex items-center justify-center ">
                         {post.username.charAt(0).toUpperCase()}
                       </div>
                       <h1 className="">{post.username}</h1>
                     </div>
+                    <div className="text-xs">{moment(post.createdAt).fromNow()}</div>
                   </div>
                   <h3 className="text-xl h-[10%] font-semibold text-gray-900">
-                    {post.content.title}
+                    {post.content.title} 
                   </h3>
                   <p className="text-gray-700 h-[10%] ">
                     {post.content.message}
@@ -324,15 +329,20 @@ export default function Post() {
                       <div className=" h-[70%] px-2 overflow-scroll no-scrollbar">
                         {commentData.map((data, index) => (
                           <div key={index} className="flex mt-2 flex-col p-2 rounded-lg bg-slate-300 shadow-sm">
+                            <div className="w-full flex justify-between">
                             <div className="flex gap-2 items-center ">
                               <div className="h-4 w-4 bg-black rounded-full  "></div>
-                              <div className="text-sm text-black">{data.userName}</div>
+                              <div className="text-sm text-black ">{data.userName}</div>
                             </div>
+                            <div className="text-[10px] text-gray-500">{moment(data.createdAt).fromNow()}</div>
+                            </div>
+                            
                             <div className="flex justify-between items-center">
                             <h1 className=" ms-6 text-sm text-gray-500">
                               {data.commentContent}
                             </h1>
-                            <div className=""><i className= " text-xs text-gray-600 fa-solid fa-trash"></i></div>
+                            <div className=""><i className= " text-[10px] text-gray-500 fa-solid fa-trash hover:rotate-45 duration-300 transition"></i></div>
+
                             </div>
                             
                           </div>

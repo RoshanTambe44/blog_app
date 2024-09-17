@@ -2,11 +2,14 @@
 
 import { useStore } from '@/context/store'
 import axios from 'axios'
+import { time } from 'console'
+import moment from 'moment'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { use, useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 
 
@@ -31,6 +34,7 @@ export default function MainDashboard() {
         username: string,
         userId:string,
         content:{message:string, title: string}
+        createdAt: Date
     }
     interface PostLike {
         _id: string,
@@ -74,6 +78,7 @@ useEffect(()=>{
     })();
 },[contextData.userId])    
 
+console.log(postData);
 
 
 useEffect(() => {
@@ -188,7 +193,13 @@ function shareHandler(id: string) {
                 <div className="space-y-4 overflow-y-scroll no-scrollbar h-[90%] rounded-lg">
                     {postData.map((post, index)=><div key={index}  className="border-b cursor-pointer border-gray-200 p-4 shadow-lg rounded-lg bg-gray-400"  >
                     
-                        <div className=""><div className="flex items-center gap-2"><div className="bg-black rounded-full h-5 w-5 text-white flex items-center justify-center ">{post.username.charAt(0).toUpperCase()}</div><h1 onClick={()=>router.push(`${location.origin}/profile/${post.userId}`)} className="">{post.username}</h1></div></div>
+                        <div className="flex justify-between">
+                            <div className="flex items-center gap-2">
+                                <div className="bg-black rounded-full h-5 w-5 text-white flex items-center justify-center ">{post.username.charAt(0).toUpperCase()}</div>
+                                <h1 onClick={()=>router.push(`${location.origin}/profile/${post.userId}`)} className="">{post.username}</h1>
+                            </div>
+                            <div className="text-xs">{moment(post.createdAt).fromNow()}</div>
+                        </div>
                         <h3 className="text-xl font-semibold text-gray-900 mt-5" onClick={()=>{redirectToPost(post._id, "title")}}>{post.content.title}</h3>
                         <p className="text-gray-700 mt-4">{post.content.message}</p>
                         <div className="w-full mt-8"><span className="flex gap-4">
