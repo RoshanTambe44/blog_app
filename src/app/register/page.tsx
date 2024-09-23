@@ -32,15 +32,15 @@ export default function Register() {
 
 useEffect(()=>{userNameChack()},[])
 
-
-async function userNameChack ()  {setUserNameState(  await axios.post('/api/users/usernamematch', {username})); }
-
+async function userNameChack ()  {
+  setUserNameState(await axios.post('api/users/usernamematch', {username})); }
+ console.log(userNameState)
 useEffect(()=>{emailCheckFunc()},[])
 
 async function emailCheckFunc ()  {  setEmailCheck ( await axios.post("/api/users/login", {email})) ; }
-
-
+console.log(emailCheck)
 useEffect(() => {
+        
   if (userNameState.data.state === true &&
       emailCheck.data.message === "wrong email" &&
       password &&
@@ -49,9 +49,10 @@ useEffect(() => {
   }
 }, [userNameState.data.state, emailCheck.data.message, password, conformPass]);
 
-
+console.log(check)
   async function handler(){
-
+    console.log("handler");
+    
     try {
 
       if(userNameState.data.state == true){
@@ -62,7 +63,7 @@ useEffect(() => {
               
               contextData.setUserVerificationOtp(otp)
               contextData.setUserEmail(email)
-              
+              console.log(username, email, password , otp)
               
 
              await axios.post('/api/users/register', {username, email, password, otp} )
@@ -135,7 +136,7 @@ function conformPasswordEye() {
             <input type={passwordEye2 ? "password": "text"} id="password_confirmation" onChange={(e:any)=> setConformPass(e.target.value)} name="password_confirmation"  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="flex items-center gap-2 ">
-            {check === "done" ? <Link href='/emailVerification'  onClick={()=>handler()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</Link> : <div  onClick={()=>handler()} className="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</div>  }
+            {check === "done" ? <Link href='/emailVerification'  onClick={()=>handler()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</Link> : <div  className="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</div>  }
             <Link href='/login' className="  underline text-blue-500 cursor-pointer"> If you have already an Account</Link>
         </div>
         

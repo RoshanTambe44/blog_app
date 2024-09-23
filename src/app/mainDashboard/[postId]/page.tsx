@@ -237,7 +237,7 @@ console.log(commentData)
           ) : (
             <button
               onClick={(e) => registerHandler(e)}
-              className=" p-2 border border-gray-500  rounded-lg hover:text-white hover:bg-slate-700 hover:shadow-lg transition duration-300"
+              className=" p-2 border border-gray-500  rounded-lg text-gray-500 font-semibold hover:text-white hover:bg-slate-700 hover:shadow-lg transition duration-300"
             >
               Register
             </button>

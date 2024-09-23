@@ -68,8 +68,11 @@ export default function Profile() {
     })();
   }, [userID]);
 
+
   useEffect(() => {
     (async () => {
+      console.log(userID)
+
       const res = await axios.post("/api/users/userinfo", { userId: userID });
       console.log(res);
       setusername(res.data.userInfo.username);
@@ -172,6 +175,11 @@ export default function Profile() {
   function shareHandler(id: string) {
     toast.success("Copied");
     navigator.clipboard.writeText(`${location.origin}/mainDashboard/${id}`);
+  }
+
+  function shareProfile (id:any){
+    toast.success("Copied")
+    navigator.clipboard.writeText(`${location.origin}/profile/${id}`) 
   }
 
   return (
@@ -294,7 +302,7 @@ export default function Profile() {
                       <button className="bg-blue-500 py-2 px-4 md:px-8 text-sm   rounded-xl hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300   ">
                         Follow
                       </button>
-                      <button className="bg-blue-500 py-2 px-4 md:px-8 text-sm rounded-xl  hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300 ">
+                      <button onClick={()=>{shareProfile(userID)}} className="bg-blue-500 py-2 px-4 md:px-8 text-sm rounded-xl  hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300 ">
                         Share
                       </button>
                     </div>

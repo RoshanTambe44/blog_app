@@ -10,8 +10,11 @@ export async function POST (req:Request ){
         await Connect()
     const reqBody= await req.json()
     const {email,  password} = reqBody
+    console.log(email)
     if(email.includes('@')){
+        
     const userData = await user.findOne({ email : email } );
+    console.log("userdata=",userData)
     if(!userData){
         
         return Response.json({message: "wrong email"  })

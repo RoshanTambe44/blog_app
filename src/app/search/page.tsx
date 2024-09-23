@@ -2,12 +2,16 @@
 
 import { useStore } from "@/context/store";
 import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+
+
 
 export default function Search() {
   console.log("search");
+  const route = useRouter();
   const contextData = useStore();
   const [allProfileData, setallProfileData] = useState<AllProfileData[]>([]);
   const [follows, setFollows] = useState<followData[]>([]);
@@ -16,6 +20,7 @@ export default function Search() {
   interface filterData {
     _id: string;
     count: number;
+    userId: string
   }
   interface followData {
     followingId: string;
@@ -24,6 +29,7 @@ export default function Search() {
   interface AllProfileData {
     _id: string;
     count: number;
+    userId: string
   }
 
   useEffect(() => {
@@ -73,6 +79,13 @@ export default function Search() {
     getFollowData(contextData.userName);
   }
 
+
+  function shareProfile (id:any){
+    toast.success("Copied")
+    navigator.clipboard.writeText(`${location.origin}/profile/${id}`) 
+  }
+
+  
   const userName = contextData?.userName || "";
   const firstLatter = userName.charAt(0).toUpperCase();
 
@@ -185,7 +198,7 @@ export default function Search() {
                               </div>
                             </div>
                             <div className="flex md:gap-8 gap-2 items-center cursor-pointer ">
-                              <div className="md:py-2 md:px-4 px-2 py-1 text-sm bg-blue-500 rounded-lg">
+                              <div className="md:py-2 md:px-4 px-2 py-1 text-sm bg-blue-500 rounded-lg" onClick={()=>shareProfile(data.userId)}>
                                 share
                               </div>
                               {data._id === contextData.userName ? (
@@ -225,6 +238,7 @@ export default function Search() {
           </main>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 }

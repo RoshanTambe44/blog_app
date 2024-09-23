@@ -164,6 +164,11 @@ export default function YourProfile() {
     navigator.clipboard.writeText(`${location.origin}/mainDashboard/${id}`);
   }
 
+  function shareProfile (id:any){
+    toast.success("Copied")
+    navigator.clipboard.writeText(`${location.origin}/profile/${id}`) 
+  }
+
   return (
     <div className="h-[100vh] overflow-hidden">
       <nav className="bg-white shadow-md">
@@ -246,7 +251,7 @@ export default function YourProfile() {
                   <h1 className="text-2xl ">{contextData.userName}</h1>{" "}
                   <button
                     onClick={logoutHandler}
-                    className="p-2 border border-gray-500  rounded-lg hover:text-white hover:bg-slate-700 hover:shadow-lg transition duration-300"
+                    className="p-2 border border-gray-500 text-gray-500 rounded-lg hover:text-white hover:bg-slate-700 hover:shadow-lg transition duration-300"
                   >
                     Logout
                   </button>
@@ -288,7 +293,7 @@ export default function YourProfile() {
                     </div>
                     <div className="w-full ">
                       
-                      <button className="bg-blue-500 py-2 px-4 md:px-8 rounded-xl  hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300 ">
+                      <button onClick={()=>shareProfile(contextData.userId)} className="bg-blue-500 py-2 px-4 md:px-8 rounded-xl  hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300 ">
                         Share
                       </button>
                     </div>
