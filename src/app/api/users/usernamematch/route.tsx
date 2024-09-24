@@ -12,10 +12,9 @@ export async function POST (req: Request) {
     const userNameData = await user.findOne({username})
     console.log("res=",userNameData)
     if (userNameData){
-        console.log("must have unique username ")
-        return Response.json({state : false})
+        return Response.json({state : false, message:"must have unique username" })
     }
 
-    else{ return Response.json({state: true, message:"can't find it"}) }
+    else{ return Response.json({state: true, message:"nice username"}) }
 
 }

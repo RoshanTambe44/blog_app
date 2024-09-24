@@ -1,7 +1,7 @@
 'use client'
 import axios from 'axios'
 import Link from 'next/link'
-import React, { useContext, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import emailjs from "@emailjs/browser";
 import { useStore } from '@/context/store';
 import { toast, ToastContainer } from 'react-toastify';
@@ -25,26 +25,23 @@ export default function Register() {
   
   
   
+
+async function userNameChack (username:any)  {setUserNameState(await axios.post('/api/users/usernamematch', {username})); }
+
+
+async function emailCheckFunc (email:any)  { setEmailCheck ( await axios.post("/api/users/emailmatch", {email})) ; }
+
+
+
+useEffect(() => {  
+  console.log("in use effect check");
   
-  
-
-    
-
-useEffect(()=>{userNameChack()},[])
-
-async function userNameChack ()  {
-  setUserNameState(await axios.post('api/users/usernamematch', {username})); }
- console.log(userNameState)
-useEffect(()=>{emailCheckFunc()},[])
-
-async function emailCheckFunc ()  {  setEmailCheck ( await axios.post("/api/users/login", {email})) ; }
-console.log(emailCheck)
-useEffect(() => {
-        
   if (userNameState.data.state === true &&
-      emailCheck.data.message === "wrong email" &&
+      emailCheck.data.message === "email" &&
       password &&
       password === conformPass) {
+        console.log("done");
+        
     setCheck("done");
   }
 }, [userNameState.data.state, emailCheck.data.message, password, conformPass]);
@@ -56,7 +53,7 @@ console.log(check)
     try {
 
       if(userNameState.data.state == true){
-        if(emailCheck.data.message == "wrong email"){
+        if(emailCheck.data.message == "email"){
           if(password){
             if(password == conformPass ) {
               const otp:any = Math. floor(Math. random() * (9999 - 1000 + 1)) + 1000 
@@ -119,13 +116,13 @@ function conformPasswordEye() {
     <form action="/register" method="POST">
         <div className="mb-4">
             <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Username</label>
-            <input type="text" id="username" onChange={(e:any)=> setUsername(e.target.value)} name="username" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required/>
+            <input type="text" id="username" onChange={(e:any)=> {setUsername(e.target.value); userNameChack(e.target.value)} } name="username" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required/>
             {username ? <> {userNameState.data.state === true ? <p className='text-sm ps-1 text-green-500' >Nice username</p>: <p className='text-sm ps-1 text-red-500' >Username must be uniqe</p>}</> : <></> }
         </div>
         <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Email</label>
-            <input type="email" id="email" onChange={(e:any)=> setEmail(e.target.value)} name="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
-          {emailCheck.data.message == "wrong password"  ? <p className='text-sm ps-1 text-red-500' >Email already in use.</p>: <></>}
+            <input type="email" id="email" onChange={(e:any)=>{ setEmail(e.target.value); emailCheckFunc(e.target.value)} } name="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+          {emailCheck.data.message == "email already in use"  ? <p className='text-sm ps-1 text-red-500' >Email already in use.</p>: <></>}
         </div>
         <div className="mb-4">
             <label htmlFor="password"  className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Password <span className='cursor-pointer ms-2' onClick={passwordEye} ><i className={passwordEye1 ? "fa-regular fa-eye-slash" : "fa-regular fa-eye"}></i></span></label>

@@ -8,13 +8,10 @@ import { NextResponse } from "next/server";
 export async function POST (req:Request ){
     try {
         await Connect()
-    const reqBody= await req.json()
-    const {email,  password} = reqBody
-    console.log(email)
+        const {email,  password} = await req.json()
+    
     if(email.includes('@')){
-        
     const userData = await user.findOne({ email : email } );
-    console.log("userdata=",userData)
     if(!userData){
         
         return Response.json({message: "wrong email"  })
