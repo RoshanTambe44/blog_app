@@ -60,7 +60,6 @@ console.log(check)
               
               contextData.setUserVerificationOtp(otp)
               contextData.setUserEmail(email)
-              console.log(username, email, password , otp)
               
 
              await axios.post('/api/users/register', {username, email, password, otp} )

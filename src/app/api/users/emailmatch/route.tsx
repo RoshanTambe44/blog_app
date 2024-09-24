@@ -10,7 +10,7 @@ export async function POST (req: Request) {
 
     const emailData = await user.findOne({email})
     if (emailData){
-        return Response.json({state : false, message:"email already in use" })
+        return Response.json({state : false, message:"email already in use", emailData })
     }
 
     else{ return Response.json({state: true, message:"email"}) }
