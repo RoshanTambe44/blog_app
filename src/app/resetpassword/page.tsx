@@ -2,7 +2,9 @@
 import { useStore } from '@/context/store'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
+
 
 
 
@@ -20,12 +22,12 @@ async function resetPassHandler(e: any ){
   if(resetPassword === conformResetPassword){
     console.log(conformResetPassword, contextData.userEmail)
     const res = await axios.post("/api/users/changepassword", { password: conformResetPassword , email: contextData.userEmail })
-    route.push("/login")
-    console.log("set password" , res);
+    toast.success("password changed")
+    setTimeout(()=>{route.push("/login")}, 3000)
     
   }
   else{
-    console.log("password not match")
+    toast.error("password not match")
   }
 }
 
@@ -73,6 +75,7 @@ function conformPasswordEye() {
             </div>
         </form>
     </div>
+    <ToastContainer/>
     </div>
   )
 }

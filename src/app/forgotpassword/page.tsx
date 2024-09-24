@@ -3,6 +3,7 @@ import { useStore } from '@/context/store'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
 
 
 
@@ -22,7 +23,6 @@ useEffect(() => {
 },[contextData.userVerificationOtp]); 
 
 
-console.log(otp)
 
 
 async function userVerifyHandler(e: any ){
@@ -33,7 +33,7 @@ if(otp == inpOtp){
   
 }
 else{
-  console.log("otp not matched")
+  toast.error("Must have correct OTP")
 }
 
 
@@ -57,6 +57,7 @@ else{
             </div>
         </form>
     </div>
+    <ToastContainer/>
     </div>
   )
 }

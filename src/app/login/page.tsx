@@ -62,10 +62,15 @@ export default function Login() {
   }
 
  async function forgotPasswordHandler(email:any) {
+
+  
     if(email.includes('@'))
     {
       const res = await axios.post("/api/users/emailmatch",{email});
-      const otp:any = Math. floor(Math. random() * (9999 - 1000 + 1)) + 1000
+
+      if(res.data.emailData){
+
+        const otp:any = Math. floor(Math. random() * (9999 - 1000 + 1)) + 1000
       emailjs.send("service_vdesto2","template_bx8edcj",{
         firstName: res.data.emailData.username,
         otp: otp,
@@ -76,13 +81,21 @@ export default function Login() {
         contextData.setUserEmail(email)
 
         route.push("/forgotpassword")
+      }
+      else{
+        toast.error("Enter correct email")
+      }
+      
 
       
     }
     else{
       const res = await axios.post("/api/users/usernamematch",{username:email});
-      const otp:any = Math. floor(Math. random() * (9999 - 1000 + 1)) + 1000
-      emailjs.send("service_vdesto2","template_bx8edcj",{
+
+      if (res.data.userNameData) {
+
+        const otp:any = Math. floor(Math. random() * (9999 - 1000 + 1)) + 1000
+        emailjs.send("service_vdesto2","template_bx8edcj",{
         firstName: res.data.userNameData.username,
         otp: otp,
         email: res.data.userNameData.email,
@@ -92,6 +105,11 @@ export default function Login() {
         contextData.setUserEmail(res.data.userNameData.email)
         
         route.push("/forgotpassword")
+      }
+      else{
+        toast.error("Enter correct username")
+      }
+      
 
     }
     
@@ -104,7 +122,7 @@ export default function Login() {
         <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center dark:text-white">Login</h2>
         <form action="/login" method="POST">
             <div className="mb-4">
-                <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Email</label>
+                <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Email / Username</label>
                 <input type="email" onChange={(e: any )=>setEmail(e.target.value)} id="email" name="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />{emailPass === "wrong email" ?<h1 className="text-red-500 text-sm">wrong email</h1>:<></>}
             </div>
             <div className="mb-4">
