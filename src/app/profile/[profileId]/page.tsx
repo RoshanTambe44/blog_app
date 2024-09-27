@@ -20,9 +20,15 @@ export default function Profile() {
   const [chargeGetLikeData, setChargeGetLikeData] = useState<number>(0);
   const [followings, setFollowings] = useState<string[]>([]);
   const [followers, setFollowers] = useState<string[]>([]);
+  const [follows, setFollows] = useState<followData[]>([]);
   const [postLikeCounts, setpostLikeCounts] = useState<Record<string, number>>(
     {}
   );
+
+  interface followData {
+    followingId: string;
+  }
+
   const [postCommentCounts, setpostCommentCounts] = useState<
     Record<string, number>
   >({});
@@ -78,6 +84,7 @@ export default function Profile() {
       setusername(res.data.userInfo.username);
       getFollowingsCount(res.data.userInfo.username);
       getFollowersCount(res.data.userInfo.username)
+      getFollowData(res.data.userInfo.username)
     })();
   }, [userID]);
 
@@ -141,6 +148,13 @@ export default function Profile() {
     setFollowers(res.data.followingCountRes);
   }
 
+  async function getFollowData(username: string | undefined) {
+    const res = await axios.post("/api/users/follow/getfollowdata", {
+      followerId: username,
+    });
+    setFollows(res.data.followDataRes);
+  }
+
   async function likeHandler(id: string) {
     if (likedData.some((data) => data.postId === id)) {
       const deleteRes = await axios.post("/api/users/likes/removelike", {
@@ -180,6 +194,27 @@ export default function Profile() {
   function shareProfile (id:any){
     toast.success("Copied")
     navigator.clipboard.writeText(`${location.origin}/profile/${id}`) 
+  }
+
+
+  async function followHandler(followingUserName: string | undefined) {
+    const res = await axios.post("/api/users/follow", {
+      followerId: contextData.userName,
+      followingId: followingUserName,
+    });
+    getFollowData(contextData.userName);
+    const res2 = await axios.post("/api/users/notification/notificationadd", {userId: followingUserName , type:"follow", notifications:{userId:contextData.userName}});
+
+  }
+
+  async function unfollowHandler(unfollowingusername: string | undefined) {
+    const res = await axios.post("/api/users/unfollow", {
+      followerId: contextData.userName,
+      followingId: unfollowingusername,
+    });
+    getFollowData(contextData.userName);
+    const res2 = await axios.post("/api/users/notification/notificationremove", {userId: unfollowingusername , type:"follow", notifications:{userId:contextData.userName}});
+
   }
 
   return (
@@ -299,9 +334,29 @@ export default function Profile() {
                       </div>
                     </div>
                     <div className="w-full flex justify-start items-center gap-4">
-                      <button className="bg-blue-500 py-2 px-4 md:px-8 text-sm   rounded-xl hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300   ">
-                        Follow
-                      </button>
+                    {username === contextData.userName ? (
+                                <></>
+                              ) : (
+                                <>
+                                  {follows.some(
+                                    (follow) => follow.followingId === username
+                                  ) ? (
+                                    <div
+                                      onClick={() => unfollowHandler(username)}
+                                      className=" cursor-pointer py-2 bg-slate-200 text-gray-800  px-4 md:px-8 text-sm rounded-xl  hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300 "
+                                    >
+                                      Unfollow
+                                    </div>
+                                  ) : (
+                                    <div
+                                      onClick={() => followHandler(username)}
+                                      className="cursor-pointer bg-blue-500 py-2 px-4 md:px-8 text-sm rounded-xl  hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300 "
+                                    >
+                                      Follow
+                                    </div>
+                                  )}
+                                </>
+                              )}
                       <button onClick={()=>{shareProfile(userID)}} className="bg-blue-500 py-2 px-4 md:px-8 text-sm rounded-xl  hover:bg-blue-400 hover:text-gray-900 shadow-lg  hover:-translate-y-1 transition duration-300 ">
                         Share
                       </button>
