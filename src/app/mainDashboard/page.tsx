@@ -2,7 +2,6 @@
 
 import { useStore } from '@/context/store'
 import axios from 'axios'
-import { time } from 'console'
 import moment from 'moment'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -115,7 +114,7 @@ async function getAllLIkes(userid:string | undefined) {
     
 }
 
-async function likeHandler(id:string){
+async function likeHandler(id:string, username:string, postTitle:string){
     if(likedData.some((data)=> data.postId === id )){
        const deleteRes = await axios.post("/api/users/likes/removelike",{userId : contextData.userId, postId:id })
         setChargeGetLikeData(Math.random())
@@ -124,9 +123,12 @@ async function likeHandler(id:string){
     }
     else{
         const likeRes = await axios.post("/api/users/likes", { userId : contextData.userId, postId:id  })    
+        
         setChargeGetLikeData(Math.random())
         setchargeLikeCount(Math.random());
         getAllLIkes(contextData.userId)
+        const res2 = await axios.post("api/users/notification/notificationadd", {userId: username , type:"like", notifications:{userId:contextData.userName, post:postTitle }});
+
 
     }
 }
@@ -204,7 +206,7 @@ function shareHandler(id: string) {
                         <p className="text-gray-700 mt-4">{post.content.message}</p>
                         <div className="w-full mt-8"><span className="flex gap-4">
                         <div className="flex flex-col items-center">
-                        <i onClick={()=>{likeHandler(post._id); }} className={likedData.some((obj) => obj.postId === post._id)? "fa-solid fa-heart ": "fa-regular fa-heart" }></i>
+                        <i onClick={()=>{likeHandler(post._id, post.username, post.content.title ); }} className={likedData.some((obj) => obj.postId === post._id)? "fa-solid fa-heart ": "fa-regular fa-heart" }></i>
                         <div className="text-xs font-light">{postLikeCounts[post._id] || 0}</div>
                         </div>
 

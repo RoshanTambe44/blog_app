@@ -129,7 +129,7 @@ export default function Post() {
     })();
   }, [chargeGetLikeData]);
 
-  async function likeHandler(id:any) {
+  async function likeHandler(id:any, username:any, postTitle:any) {
     if (token) {
       if (likedData.some((data) => data.postId === id)) {
         console.log("remove");
@@ -147,6 +147,7 @@ export default function Post() {
         });
         setchargeLikeCount(Math.random());
         setChargeGetLikeData(Math.random());
+        const res2 = await axios.post("/api/users/notification/notificationadd", {userId: username , type:"like", notifications:{userId:contextData.userName, post:postTitle }});
       }
     } else {
       router.push("/register");
@@ -166,8 +167,9 @@ export default function Post() {
       router.push("/register");
     }
   }
-console.log(commentData)
-  async function comentSend(e: any) {
+
+
+  async function comentSend(e: any, username:any, postTitle:any ) {
     e.preventDefault();
 
     if(comment){
@@ -182,6 +184,8 @@ console.log(commentData)
         setchargeCommentsCount(Math.random());
         setComment("");
       toast.success("Commented")
+      const res2 = await axios.post("/api/users/notification/notificationadd", {userId: username , type:"comment", notifications:{userId:contextData.userName, post:postTitle, comment }});
+
 
       } catch (error) {
         console.log(error);
@@ -292,7 +296,7 @@ console.log(commentData)
                       <div className="flex flex-col items-center">
                         <i
                           onClick={() => {
-                            likeHandler(postId);
+                            likeHandler(postId, post.username, post.content.title);
                           }}
                           className={
                             likedData.some((obj) => obj.postId === post._id)
@@ -357,7 +361,7 @@ console.log(commentData)
                           className="bg-transparent border-b border-gray-700 focus:outline-none  p-2 w-[80%] text-black placeholder:text-black"
                         />
                         <button
-                          onClick={(e) => comentSend(e)}
+                          onClick={(e) => comentSend(e, post.username, post.content.title, )}
                           className="bg-blue-500 w-[20%] text-white border border-blue-950 rounded-lg p-2 hover:bg-blue-300 hover:text-black"
                         >
                           Send

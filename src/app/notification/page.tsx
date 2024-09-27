@@ -3,11 +3,24 @@
 import { useStore } from "@/context/store";
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import { comment } from "postcss";
+import React, { useEffect, useState } from "react";
+import moment from 'moment'
+
+
 
 
 export default function Notification() {
   const contextData = useStore()
+  const [notificationData, setNotificationData] = useState<noti[]>([])
+
+interface noti {
+  userid : string | undefined,
+  type : string | undefined,
+  createdAt : string
+  notifications : {userId:string, comment: string, post: string }
+}
+
   const userName = contextData?.userName || "";
     const firstLatter = userName.charAt(0).toUpperCase();
  console.log("notification")
@@ -17,10 +30,20 @@ export default function Notification() {
           contextData.setUsername(userDataRes.data.tokenUserData.username)
           contextData.setUserId(userDataRes.data.tokenUserData._id)
           contextData.setUserEmail(userDataRes.data.tokenUserData.email)
-  
+          getNotiData(userDataRes.data.tokenUserData.username)
           
       })();
   },[contextData])
+
+
+ async function getNotiData(userId:any) {
+   const res =await axios.post("/api/users/notification/notificationget", {userId})
+   setNotificationData(res.data.notificationData)
+   console.log(res);
+   
+  }
+
+
 
   return (
     <div className="h-[100vh] overflow-hidden">
@@ -58,7 +81,11 @@ export default function Notification() {
               <h2 className="text-2xl font-bold mb-4 text-gray-900 h-[10%]">
                 Notifications
               </h2>
-              <p className="text-gray-700 h-[90%]">You have no new notifications.</p>
+              <div className="text-gray-700 h-[90%]">
+              {notificationData.map((data)=><><div className={data.type === "follow" ? "p-2 border-b-[1px] flex justify-between" : " hidden p-2 border-b-[1px]" }><h1 className=""><b>{data.notifications.userId}</b> following you.</h1><h1 className="text-xs" >{ moment(data.createdAt).fromNow() }</h1> </div>
+              <div className={data.type === "like" ? "p-2 border-b-[1px] flex justify-between " : "hidden p-2 border-b-[1px] " }><h1 className=""><b>{data.notifications.userId}</b> liked your post <b>{data.notifications.post}</b>.</h1><h1 className="text-xs" >{ moment(data.createdAt).fromNow() }</h1>  </div>
+              <div className={data.type === "comment" ? "p-2 border-b-[1px] flex justify-between" : "hidden p-2 border-b-[1px]" }><h1 className=""><b>{data.notifications.userId}</b> commented <b>{data.notifications.comment}</b> to your post <b>{data.notifications.post}</b>.</h1> <h1 className="text-xs" >{ moment(data.createdAt).fromNow() }</h1> </div></>)}
+              </div>
             </section>
           </main>
         </div>
@@ -66,3 +93,4 @@ export default function Notification() {
     </div>
   );
 }
+

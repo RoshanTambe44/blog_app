@@ -68,6 +68,7 @@ export default function Search() {
       followerId: contextData.userName,
       followingId: followingUserName,
     });
+    const res2 = await axios.post("api/users/notification/notificationadd", {userId: followingUserName , type:"follow", notifications:{userId:contextData.userName}});
     getFollowData(contextData.userName);
   }
 
