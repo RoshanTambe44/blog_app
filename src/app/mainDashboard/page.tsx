@@ -120,6 +120,8 @@ async function likeHandler(id:string, username:string, postTitle:string){
         setChargeGetLikeData(Math.random())
         setchargeLikeCount(Math.random());
         getAllLIkes(contextData.userId)
+        const res2 = await axios.post("/api/users/notification/notificationremove", {userId: username , type:"like", notifications:{userId:contextData.userName, post:postTitle }});
+
     }
     else{
         const likeRes = await axios.post("/api/users/likes", { userId : contextData.userId, postId:id  })    
@@ -127,7 +129,7 @@ async function likeHandler(id:string, username:string, postTitle:string){
         setChargeGetLikeData(Math.random())
         setchargeLikeCount(Math.random());
         getAllLIkes(contextData.userId)
-        const res2 = await axios.post("api/users/notification/notificationadd", {userId: username , type:"like", notifications:{userId:contextData.userName, post:postTitle }});
+        const res2 = await axios.post("/api/users/notification/notificationadd", {userId: username , type:"like", notifications:{userId:contextData.userName, post:postTitle }});
 
 
     }

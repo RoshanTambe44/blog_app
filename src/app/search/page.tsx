@@ -68,8 +68,9 @@ export default function Search() {
       followerId: contextData.userName,
       followingId: followingUserName,
     });
-    const res2 = await axios.post("api/users/notification/notificationadd", {userId: followingUserName , type:"follow", notifications:{userId:contextData.userName}});
     getFollowData(contextData.userName);
+    const res2 = await axios.post("api/users/notification/notificationadd", {userId: followingUserName , type:"follow", notifications:{userId:contextData.userName}});
+
   }
 
   async function unfollowHandler(unfollowingusername: string) {
@@ -78,6 +79,8 @@ export default function Search() {
       followingId: unfollowingusername,
     });
     getFollowData(contextData.userName);
+    const res2 = await axios.post("api/users/notification/notificationremove", {userId: unfollowingusername , type:"follow", notifications:{userId:contextData.userName}});
+
   }
 
 

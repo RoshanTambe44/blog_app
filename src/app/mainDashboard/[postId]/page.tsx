@@ -139,6 +139,7 @@ export default function Post() {
         });
         setchargeLikeCount(Math.random()) ;
         setChargeGetLikeData(Math.random());
+        const res2 = await axios.post("/api/users/notification/notificationremove", {userId: username , type:"like", notifications:{userId:contextData.userName, post:postTitle }});
       } else {
         console.log("add");
         const likeRes = await axios.post("/api/users/likes", {
