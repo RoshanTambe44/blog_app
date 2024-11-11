@@ -51,7 +51,12 @@ export default function MainDashboard() {
       }
     
       
-
+ axios.interceptors.request.use((config) => {
+        config.headers['Cache-Control'] = 'no-cache';
+        config.headers['Pragma'] = 'no-cache';
+        config.params = { ...config.params, timestamp: Date.now() };
+        return config;
+      });
 useEffect(()=>{
     
     (async()=>{
