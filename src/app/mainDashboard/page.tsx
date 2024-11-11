@@ -71,9 +71,6 @@ useEffect(()=>{
                 headers: {
                   'Cache-Control': 'no-cache', 
                   'Pragma': 'no-cache'        
-                },
-                params: {
-                  timestamp: Date.now()        
                 }
               })
              
