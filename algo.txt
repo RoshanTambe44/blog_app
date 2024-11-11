@@ -1,4 +1,11 @@
 register page  => give  user details (usrname , email , password) => after click submit button genrate OTP and wich save to the local storage and send to the user by email =>
 email verifiaction page =>
 compar those OTP  if user enter correct OTP then user will verified => and after clicking that user will update as verified true  => 
-move to  the login page => here we check which email or passwor user enter is rigth or wrong so we can give him user acess to our website   
+move to  the login page => here we check which email or passwor user enter is rigth or wrong so we can give him user acess to our website 
+
+
+
+
+new functionalities : 1] add filter to the notification page  for giving filtered notification  (do not notify your actions to yourself) 
+2] add redis for improving smothness of the website, to prevent after refresh query exicution.  
+3] solve the getLikeCount API 304 Not Modify issue.

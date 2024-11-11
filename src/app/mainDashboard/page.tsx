@@ -67,7 +67,16 @@ useEffect(()=>{
 useEffect(()=>{
    ; ( async ()=>{
         try {
-            const res = await axios.get("/api/users/post/getpost");
+            const res = await axios.get("/api/users/post/getpost",  {
+                headers: {
+                  'Cache-Control': 'no-cache', 
+                  'Pragma': 'no-cache'        
+                },
+                params: {
+                  timestamp: Date.now()        
+                }
+              })
+             
             setPostData(res.data.postData.reverse())
             
             
