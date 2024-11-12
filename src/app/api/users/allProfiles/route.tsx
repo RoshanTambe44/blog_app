@@ -4,7 +4,7 @@ import user from "@/models/userModel";
 
 
 
-export async function GET (req:Request ){
+export async function POST (req:Request ){
     try {
     await Connect()
         const getres = await user.find().select(["_id", "username", "email", "createdAt"] )

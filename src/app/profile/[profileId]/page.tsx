@@ -40,7 +40,7 @@ export default function Profile() {
 
   useEffect(() => {
     (async () => {
-      const userDataRes = await axios.get("/api/users/me");
+      const userDataRes = await axios.post("/api/users/me");
       contextData.setUsername(userDataRes.data.tokenUserData.username);
       contextData.setUserId(userDataRes.data.tokenUserData._id);
       contextData.setUserEmail(userDataRes.data.tokenUserData.email);
@@ -103,7 +103,7 @@ export default function Profile() {
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get("/api/users/post/getpostlikecount");
+      const res = await axios.post("/api/users/post/getpostlikecount");
       const likeCounts = res.data.getPostLikes.reduce(
         (acc: Record<string, number>, { _id, count }: PostLike) => {
           acc[_id] = count;
@@ -117,7 +117,7 @@ export default function Profile() {
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get("/api/users/post/getpostcommentcount");
+      const res = await axios.post("/api/users/post/getpostcommentcount");
       const commentCounts = res.data.getPostCommentRes.reduce(
         (acc: Record<string, number>, { _id, count }: PostLike) => {
           acc[_id] = count;

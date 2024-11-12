@@ -59,7 +59,7 @@ export default function Post() {
   useEffect(() => {
     (async () => {
       try {
-        const userDataRes = await axios.get("/api/users/me");
+        const userDataRes = await axios.post("/api/users/me");
         if (userDataRes.data.tokenUserData) {
           contextData.setUsername(
             userDataRes.data.tokenUserData.username
@@ -80,7 +80,7 @@ export default function Post() {
  
   useEffect(() => {
     (async () => {
-      const res = await axios.get("/api/users/post/getpostlikecount");
+      const res = await axios.post("/api/users/post/getpostlikecount");
       const likeCounts = res.data.getPostLikes.reduce((acc: Record<string, number>, { _id, count }:PostLike) => {
         acc[_id] = count;
         return acc;
@@ -91,7 +91,7 @@ export default function Post() {
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get("/api/users/post/getpostcommentcount");
+      const res = await axios.post("/api/users/post/getpostcommentcount");
       const commentCounts = res.data.getPostCommentRes.reduce(
         (acc: Record<string, number>, { _id, count }:PostLike) => {
           acc[_id] = count;
