@@ -3,6 +3,7 @@
 import { useStore } from '@/context/store'
 import axios from 'axios'
 import moment from 'moment'
+import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -14,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 axios.interceptors.request.use((config) => {
     config.headers['Cache-Control'] = 'no-store';
     config.headers['Pragma'] = 'no-store';
+    config.headers['Expires'] = '0'; 
     return config;
   });
 
@@ -66,11 +68,11 @@ useEffect(()=>{
    ; ( async ()=>{
         try {
             const res = await axios.get("/api/users/post/getpost",  {
-                headers: { 'Cache-Control': 'no-store' },
-                params: { timestamp: Date.now() } 
+                params: { timestamp: Date.now() }
               } )
              
             setPostData(res.data.postData.reverse())
+            revalidatePath('/mainDashboard')
             
             
             } catch (error) {
