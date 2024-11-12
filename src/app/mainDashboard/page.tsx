@@ -67,7 +67,7 @@ useEffect(()=>{
 useEffect(()=>{
    ; ( async ()=>{
         try {
-            const res = await axios.get("/api/users/post/getpost",  {
+            const res = await axios.post("/api/users/post/getpost",  {
                 params: { timestamp: Date.now() }
               } )
              
