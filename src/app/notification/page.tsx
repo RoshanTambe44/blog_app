@@ -83,8 +83,8 @@ interface noti {
               </h2>
               <div className="text-gray-700 h-[90%] overflow-y-scroll no-scrollbar ">
               {notificationData.map((data)=><><div className={data.type === "follow" ? "p-2 border-b-[1px] flex justify-between" : " hidden p-2 border-b-[1px]" }><h1 className="w-56"><b>{data.notifications.userId}</b> following you.</h1><h1 className="text-xs" >{ moment(data.createdAt).fromNow() }</h1> </div>
-              <div className={data.type === "like" ? "p-2 border-b-[1px] flex justify-between " : "hidden p-2 border-b-[1px] " }><h1 className="w-56 md:w-auto text-sm md:text-[16px]"><b>{data.notifications.userId}</b> liked your post <b>" {data.notifications.post} "</b>.</h1><h1 className="text-xs" >{ moment(data.createdAt).fromNow() }</h1>  </div>
-              <div className={data.type === "comment" ? "p-2 border-b-[1px] flex justify-between" : "hidden p-2 border-b-[1px]" }><h1 className="w-56 md:w-auto text-sm md:text-[16px]"><b>{data.notifications.userId}</b> commented <b>{data.notifications.comment}</b> to your post <b>" {data.notifications.post} "</b>.</h1> <h1 className="text-xs" >{ moment(data.createdAt).fromNow() }</h1> </div></>)}
+              <div className={data.type === "like" ? "p-2 border-b-[1px] flex justify-between " : "hidden p-2 border-b-[1px] " }><h1 className="w-56 md:w-auto text-sm md:text-[16px]"><b>{data.notifications.userId}</b> liked your post <b>&quot; {data.notifications.post} &quot;</b>.</h1><h1 className="text-xs" >{ moment(data.createdAt).fromNow() }</h1>  </div>
+              <div className={data.type === "comment" ? "p-2 border-b-[1px] flex justify-between" : "hidden p-2 border-b-[1px]" }><h1 className="w-56 md:w-auto text-sm md:text-[16px]"><b>{data.notifications.userId}</b> commented <b>{data.notifications.comment}</b> to your post <b>&quot; {data.notifications.post} &quot;</b>.</h1> <h1 className="text-xs" >{ moment(data.createdAt).fromNow() }</h1> </div></>)}
               </div>
             </section>
           </main>
