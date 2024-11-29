@@ -30,7 +30,7 @@ console.log("followers")
 
     useEffect(()=>{
       (async()=>{
-          const userDataRes = await axios.get("/api/users/me");
+          const userDataRes = await axios.post("/api/users/me");
           contextData.setUsername(userDataRes.data.tokenUserData.username)
           contextData.setUserId(userDataRes.data.tokenUserData._id)
           contextData.setUserEmail(userDataRes.data.tokenUserData.email)
