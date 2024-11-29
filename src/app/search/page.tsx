@@ -34,7 +34,7 @@ export default function Search() {
 
   useEffect(() => {
     (async () => {
-      const userDataRes = await axios.get("api/users/me");
+      const userDataRes = await axios.post("api/users/me");
       contextData.setUsername(userDataRes.data.tokenUserData.username);
       contextData.setUserId(userDataRes.data.tokenUserData._id);
       contextData.setUserEmail(userDataRes.data.tokenUserData.email);
@@ -44,7 +44,7 @@ export default function Search() {
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get("api/users/allProfiles");
+      const res = await axios.post("api/users/allProfiles");
       setallProfileData(res.data.getPostRes);
     })();
   }, []);

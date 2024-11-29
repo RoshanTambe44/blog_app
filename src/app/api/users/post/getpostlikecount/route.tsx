@@ -4,7 +4,7 @@ import likes from "@/models/likedModel";
 
 
 
-export async function GET(req: Request){
+export async function POST(){
     try {
  
     await Connect();

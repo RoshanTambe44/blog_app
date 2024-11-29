@@ -3,15 +3,21 @@
 import { useStore } from '@/context/store'
 import axios from 'axios'
 import moment from 'moment'
+import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 
-
+axios.interceptors.request.use((config) => {
+    config.headers['Cache-Control'] = 'no-store';
+    config.headers['Pragma'] = 'no-store';
+    config.headers['Expires'] = '0'; 
+    return config;
+  });
 
 
 export default function MainDashboard() {
@@ -42,20 +48,14 @@ export default function MainDashboard() {
     interface likeData {
         postId: string
       }
-
-      
-
-    interface commentData{
-        userName: string;
-        commentContent: string 
-      }
     
       
 
 useEffect(()=>{
     
     (async()=>{
-        const userDataRes = await axios.get("api/users/me");
+        const userDataRes = await axios.post("api/users/me", {
+            params: { timestamp: Date.now() } });
         contextData.setUsername(userDataRes.data.tokenUserData.username)
         contextData.setUserId(userDataRes.data.tokenUserData._id)
         contextData.setUserEmail(userDataRes.data.tokenUserData.email)
@@ -67,8 +67,12 @@ useEffect(()=>{
 useEffect(()=>{
    ; ( async ()=>{
         try {
-            const res = await axios.get("/api/users/post/getpost");
+            const res = await axios.post("/api/users/post/getpost",  {
+                params: { timestamp: Date.now() }
+              } )
+             
             setPostData(res.data.postData.reverse())
+            revalidatePath('/mainDashboard')
             
             
             } catch (error) {
@@ -82,7 +86,9 @@ console.log(postData);
 
 useEffect(() => {
  (async () => {
-   const res =  await axios.get("/api/users/post/getpostlikecount");
+   const res =  await axios.post("/api/users/post/getpostlikecount",  {
+    params: { timestamp: Date.now() }
+  });
    const likeCounts = res.data.getPostLikes.reduce((acc  :Record<string, number>, { _id, count }:PostLike) => {
     acc[_id] = count;
     return acc;
@@ -94,7 +100,9 @@ useEffect(() => {
 
 useEffect(() => {
     (async () => {
-      const res =  await axios.get("/api/users/post/getpostcommentcount");
+      const res =  await axios.post("/api/users/post/getpostcommentcount", {
+        params: { timestamp: Date.now() }
+      });
       const commentCounts = res.data.getPostCommentRes.reduce((acc:Record<string, number>, { _id, count }:PostLike) => {
        acc[_id] = count;
        return acc;
@@ -106,7 +114,9 @@ useEffect(() => {
 
 async function getAllLIkes(userid:string | undefined) {
     try {   
-        const res = await axios.post("/api/users/likes/getlikedata",{userId : userid});  setLikedData(res.data.res)
+        const res = await axios.post("/api/users/likes/getlikedata",{userId : userid},  {
+            params: { timestamp: Date.now() }
+          });  setLikedData(res.data.res)
         
 } catch (error) {
     console.log(error)

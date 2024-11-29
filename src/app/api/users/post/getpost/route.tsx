@@ -4,7 +4,7 @@ import posts from "@/models/postModel";
 
 
 
-export async function GET(req: Request){
+export async function POST(){
     try {
  
     await Connect();
