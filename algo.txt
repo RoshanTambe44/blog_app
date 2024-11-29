@@ -10,3 +10,4 @@ new functionalities : 1] add filter to the notification page  for giving filtere
 2] add redis for improving smothness of the website, to prevent after refresh query exicution.  
 3] solve the getLikeCount API 304 Not Modify issue.💚
 4] multy liked glitched ( when we tap multiple time)
+5] in serach page i get user infromation by their posts / by the post model so if user did not create any post the from that page we cant find that user. so change that accordingly 

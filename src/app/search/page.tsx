@@ -46,8 +46,12 @@ export default function Search() {
     (async () => {
       const res = await axios.post("api/users/allProfiles");
       setallProfileData(res.data.getPostRes);
+      
     })();
   }, []);
+
+  console.log(allProfileData);
+  
 
   async function getFollowData(username: string | undefined) {
     const res = await axios.post("api/users/follow/getfollowdata", {
@@ -86,6 +90,8 @@ export default function Search() {
 
   function shareProfile (id:any){
     toast.success("Copied")
+    console.log(id);
+    
     navigator.clipboard.writeText(`${location.origin}/profile/${id}`) 
   }
 
